@@ -1,10 +1,11 @@
-import argparse, urllib.request, urllib.parse, json, csv
+import argparse, urllib.request, urllib.parse, json, os
+os.chdir(os.path.dirname(__file__)) #sets a constant working dir
 ##### Argument Parser starts here #####
 ap = argparse.ArgumentParser()
 ap.add_argument('-te','--text',help='Text (Tasker Command or notification text)',nargs='*')
 ap.add_argument('-ti','--title',help='Title (If set will create notification)',nargs='*')
 ap.add_argument('-i','--icon',help='Icon URI (publicly accessible URL or local file URI; used whenever a notification is created)')
-ap.add_argument('-si','--smallicon',help='Icon URI to be used as the statusbar icon')
+ap.add_argument('-s','--smallicon',help='Icon URI to be used as the statusbar icon')
 ap.add_argument('-p','--priority',help='Priority of the notification from -2 (lowest) to 2 (highest and default)')
 ap.add_argument('-v','--vibration',help='Vibration for when the notification is recived. Generate the pattern at http://autoremotejoaomgcd.appspot.com/AutoRemoteNotification.html')
 ap.add_argument('-u','--url',help='URL')
@@ -28,31 +29,26 @@ try: #loads device json into a dictionary
         deviceData = json.loads(device.read())
 except:
     print('Could not read devices. Please run setup.py')
-    exit()
 if opts.smsnumber is not None:
-    try: #loads the contacts csv as a dictionary if a number or name is supplied.
+    try: #loads the contacts json as a dictionary if a number or name is supplied.
         with open('contacts.json','r') as contact:
             contactData = json.loads(contact.read())
-    except:
+        argsdict['smsnumber'] = contactData[argsdict['smsnumber']] #replaces the name with the number
+    except: #defaults to a number if a name is not found in the json
         print('No contact names found. Using numbers. Run setup.py for instructions on using names.')
-    try:
-        argsdict['smsnumber'] = contactData[argsdict['smsnumber']]
-    except:
-        pass
-if opts.device is not None:
-    devices = {}
-    for x in deviceData['records']:
-        devices[x['deviceName']] = x['deviceId']
+if opts.device is not None: #main process
     encoded = []
-    for key, value in argsdict.items():
-        try:
+    deviceName = argsdict['device']
+    argsdict.pop('device',None) #removes device from argsdict to prevent sending extra params
+    for key, value in argsdict.items(): #sets up params to send to join
+        if value is not None:
             encoded.append('&' + key + '=' + urllib.parse.quote_plus(value) + '')
-        except:
+        if value is None:
             encoded.append('')
-    encodedPush = ''.join(encoded)
-    try:
-        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + devices[argsdict['device']] + encodedPush + '')
-    except:
-        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + opts.device + encodedPush + '&apikey=' + deviceData['apikey'] + '')
+    encodedPush = ''.join(encoded) #finalizes params
+    if 'group' not in deviceName: #push to send if going to an individual device
+        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceData[deviceName] + encodedPush + '')
+    if 'group' in deviceName: #push to send if going to a group
+        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceName + encodedPush + '&apikey=' + deviceData['apikey'] + '')
 else:
     print('No device defined.')
