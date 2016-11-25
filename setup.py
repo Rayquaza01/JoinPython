@@ -1,3 +1,5 @@
+#setup.py v1 initial release
+#https://github.com/Rayquaza01/JoinPython
 import urllib.request, json, csv, os
 os.chdir(os.path.dirname(__file__)) #sets a constant working dir
 print('An API key is needed. Get your key at https://joinjoaomgcd.appspot.com/')

@@ -9,6 +9,8 @@ Only tested on Windows. Should work with other systems, though.
 
 Setup:
 
+Download at [releases](https://github.com/Rayquaza01/JoinPython/releases)
+
 1. Go to the [Join web-interface](https://joinjoaomgcd.appspot.com/)
 2. Choose a device.
 3. Click Join API.
@@ -63,10 +65,5 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
     Vibration for when the notification is recived. Generate the pattern at
     http://autoremotejoaomgcd.appspot.com/AutoRemoteNotification.html
 ```
-
-TODO:
-* ~~Comment code~~ Should be mostly done...
-* ~~Write argument documentation~~ Done!
-* ~~Support multiple device names at once~~ And done!
 
 Make sure to escape quotes (\") in order to push them!
