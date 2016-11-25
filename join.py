@@ -17,6 +17,7 @@ ap.add_argument('-smst','--smstext',help='Some text to send in an SMS. If you wa
 ap.add_argument('-fi','--find',help='Set to true to make your device ring loudly')
 ap.add_argument('-w','--wallpaper',help='A publicly accessible URL of an image file. Will set the wallpaper on the receiving device')
 opts = ap.parse_args()
+print(opts.device)
 ##### Argument Parser ends here #####
 argsdict = {'text': opts.text, 'title': opts.title, 'icon': opts.icon, 'smallicon': opts.smallicon, 'priority': opts.priority, 'vibration': opts.vibration, 'url': opts.url, 'clipboard': opts.clipboard, 'file': opts.file, 'smsnumber': opts.smsnumber, 'smstext': opts.smstext, 'find': opts.find, 'wallpaper': opts.wallpaper, 'device': opts.device} #puts args into a dictionary for more convinient use
 for key, value in argsdict.items(): #curcumvents the need to encase args in quotes
@@ -39,6 +40,12 @@ if opts.smsnumber is not None:
 if opts.device is not None: #main process
     deviceName = argsdict['device']
     argsdict.pop('device',None) #removes device from argsdict to prevent sending extra params
+    deviceIds = []
+    if ',' in deviceName:
+        deviceNames = []
+        deviceNames = deviceName.split(',')
+        for x in deviceNames:
+            deviceIds.append(deviceData[x])
     encoded = []
     for key, value in argsdict.items(): #sets up params to send to join
         if value is not None:
@@ -48,6 +55,8 @@ if opts.device is not None: #main process
     encodedPush = ''.join(encoded) #finalizes params
     if 'group' in deviceName: #push to send if going to a group
         urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceName + encodedPush + '&apikey=' + deviceData['apikey'] + '')
+    elif deviceIds: #push to send if multiple device names are defined
+        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceIds=' + ",".join(deviceIds) + encodedPush + '&apikey=' + deviceData['apikey'] + '')
     else: #push to send if going to an individual device
         urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceData[deviceName] + encodedPush + '')
 else:

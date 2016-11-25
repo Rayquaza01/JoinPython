@@ -32,8 +32,8 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
 ```
 -d [DeviceName] or --device [DeviceName] !REQUIRED!
     The name of the device the push should go to.
-    Accepts groups as well (group.all, group.android, group.chrome, group.windows10, group.phone,
-    group.tablet, group.pc)
+    Accepts groups (group.all, group.android, group.chrome, group.windows10, group.phone,
+    group.tablet, group.pc) and multiple device names (Phone,Tablet,Desktop) as well.
 -c [Clipboard] or --clipboard [Clipboard]
     Clipboard
 -u [URL] or --url [URL]
@@ -67,6 +67,6 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
 TODO:
 * ~~Comment code~~ Should be mostly done...
 * ~~Write argument documentation~~ Done!
-* Support multiple device names at once
+* ~~Support multiple device names at once~~ And done!
 
 Make sure to escape quotes (\") in order to push them!
