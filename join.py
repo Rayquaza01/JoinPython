@@ -37,18 +37,18 @@ if opts.smsnumber is not None:
     except: #defaults to a number if a name is not found in the json
         print('No contact names found. Using numbers. Run setup.py for instructions on using names.')
 if opts.device is not None: #main process
-    encoded = []
     deviceName = argsdict['device']
     argsdict.pop('device',None) #removes device from argsdict to prevent sending extra params
+    encoded = []
     for key, value in argsdict.items(): #sets up params to send to join
         if value is not None:
             encoded.append('&' + key + '=' + urllib.parse.quote_plus(value) + '')
         if value is None:
             encoded.append('')
     encodedPush = ''.join(encoded) #finalizes params
-    if 'group' not in deviceName: #push to send if going to an individual device
-        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceData[deviceName] + encodedPush + '')
     if 'group' in deviceName: #push to send if going to a group
         urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceName + encodedPush + '&apikey=' + deviceData['apikey'] + '')
+    else: #push to send if going to an individual device
+        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceData[deviceName] + encodedPush + '')
 else:
     print('No device defined.')

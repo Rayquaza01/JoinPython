@@ -2,7 +2,9 @@
 A python script that allows for pushing to Join by Joaoapps from the command line.
 
 *Note*
+
 Requires: Python 3.5 and a Join account
+
 Only tested on Windows. Should work with other systems, though.
 
 Setup:
@@ -24,6 +26,7 @@ Contacts setup:
 6. contacts.json should be created. You can delete google.csv. End of setup.
 
 *Arguments for join.py*
+
 No arguments need to be surrounded with quotes, but it doesn't hurt.
 
 ```
