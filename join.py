@@ -1,4 +1,4 @@
-#join.py v1 initial release
+#join.py v1.1
 #https://github.com/Rayquaza01/JoinPython
 import argparse, urllib.request, urllib.parse, json, os
 os.chdir(os.path.dirname(__file__)) #sets a constant working dir
@@ -25,7 +25,7 @@ if opts.device is not None: #main process
         with open('devices.json','r') as device:
             deviceData = json.loads(device.read())
     except:
-        print('Could not read devices. Please run setup.py')
+        print('Could not read devices. Please run joinsetup.py')
         exit()
     argsdict = {'text': opts.text, 'title': opts.title, 'icon': opts.icon, 'smallicon': opts.smallicon, 'priority': opts.priority, 'vibration': opts.vibration, 'url': opts.url, 'clipboard': opts.clipboard, 'file': opts.file, 'smsnumber': opts.smsnumber, 'smstext': opts.smstext, 'find': opts.find, 'wallpaper': opts.wallpaper, 'device': opts.device} #puts args into a dictionary for more convinient use
     for key, value in argsdict.items(): #curcumvents the need to encase args in quotes
@@ -39,7 +39,7 @@ if opts.device is not None: #main process
                 contactData = json.loads(contact.read())
             argsdict['smsnumber'] = contactData[argsdict['smsnumber']] #replaces the name with the number
         except: #defaults to a number if a name is not found in the json
-            print('No contact names found. Assuming smsn is a number. Run setup.py for instructions on using names.')
+            print('No contact names found. Assuming smsn is a number. Run joinsetup.py for instructions on using names.')
     deviceName = argsdict['device']
     argsdict.pop('device',None) #removes device from argsdict to prevent sending extra params
     deviceIds = []

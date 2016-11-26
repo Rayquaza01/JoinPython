@@ -1,4 +1,4 @@
-#setup.py v1 initial release
+#joinsetup.py v1.1
 #https://github.com/Rayquaza01/JoinPython
 import urllib.request, json, csv, os
 os.chdir(os.path.dirname(__file__)) #sets a constant working dir
@@ -23,7 +23,7 @@ print('')
 print('Export your google contacts csv file into the working directory as contacts.csv')
 print('https://www.google.com/contacts/u/0/?cplus=0#contacts is where you can export the file.')
 print('Export the file in the Google format.')
-input('Press enter when this is done.')
+input('Press enter when this is done or close the window to cancel contacts setup')
 contactsData = {}
 with open('google.csv','r') as contacts: #converts csv to dict to simplify it
     read = csv.reader(contacts)

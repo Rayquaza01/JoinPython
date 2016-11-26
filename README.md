@@ -3,19 +3,19 @@ A python script that allows for pushing to Join by Joaoapps from the command lin
 
 *Note*
 
-Requires: Python 3.5 and a Join account
+Requires: Python 3 and a Join account
 
-Only tested on Windows. Should work with other systems, though.
-
-Setup:
+Only tested on Windows and Bash on Windows. Should work with other systems, though.
 
 Download at [releases](https://github.com/Rayquaza01/JoinPython/releases)
+
+Devices setup:
 
 1. Go to the [Join web-interface](https://joinjoaomgcd.appspot.com/)
 2. Choose a device.
 3. Click Join API.
 4. Click the Show button.
-5. Run setup.py and enter the API key shown when requested.
+5. Run joinsetup.py and enter the API key shown when requested.
 6. devices.json should be created. End of setup.
 
 Contacts setup:
@@ -24,8 +24,10 @@ Contacts setup:
 2. Click more
 3. Click export
 4. Make sure Google CSV is selected and download the CSV file
-5. Place google.csv in join.py's directory and run setup.py
+5. Place google.csv in join.py's directory and run joinsetup.py
 6. contacts.json should be created. You can delete google.csv. End of setup.
+
+For the best results, add join.py's working directory to your system's path.
 
 *Arguments for join.py*
 
