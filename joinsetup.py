@@ -1,4 +1,3 @@
-#joinsetup.py v1.1
 #https://github.com/Rayquaza01/JoinPython
 import urllib.request, json, csv, os
 os.chdir(os.path.dirname(__file__)) #sets a constant working dir

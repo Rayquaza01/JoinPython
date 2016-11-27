@@ -7,8 +7,6 @@ Requires: Python 3 and a Join account
 
 Only tested on Windows and Bash on Windows. Should work with other systems, though.
 
-Download at [releases](https://github.com/Rayquaza01/JoinPython/releases)
-
 Devices setup:
 
 1. Go to the [Join web-interface](https://joinjoaomgcd.appspot.com/)
