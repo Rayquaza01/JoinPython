@@ -26,39 +26,34 @@ if opts.device is not None: #main process
     except:
         print('Could not read devices. Please run joinsetup.py')
         exit()
-    argsdict = {'text': opts.text, 'title': opts.title, 'icon': opts.icon, 'smallicon': opts.smallicon, 'priority': opts.priority, 'vibration': opts.vibration, 'url': opts.url, 'clipboard': opts.clipboard, 'file': opts.file, 'smsnumber': opts.smsnumber, 'smstext': opts.smstext, 'find': opts.find, 'wallpaper': opts.wallpaper, 'device': opts.device} #puts args into a dictionary for more convinient use
-    for key, value in argsdict.items(): #curcumvents the need to encase args in quotes
+    argsDict = vars(opts) #puts args into a dictionary for more convinient use
+    for key, value in argsDict.items(): #curcumvents the need to encase args in quotes
         if type(value) is list:
-            argsdict[key] = ' '.join(value)
-        if type(value) is str:
-            argsdict[key] = value
+            argsDict[key] = ' '.join(value)
     if opts.smsnumber is not None:
         try: #loads the contacts json as a dictionary if a number or name is supplied.
             with open('contacts.json','r') as contact:
                 contactData = json.loads(contact.read())
-            argsdict['smsnumber'] = contactData[argsdict['smsnumber']] #replaces the name with the number
+            argsDict['smsnumber'] = contactData[argsDict['smsnumber']] #replaces the name with the number
         except: #defaults to a number if a name is not found in the json
             print('No contact names found. Assuming smsn is a number. Run joinsetup.py for instructions on using names.')
-    deviceName = argsdict['device']
-    argsdict.pop('device',None) #removes device from argsdict to prevent sending extra params
+    deviceName = argsDict['device']
+    argsDict.pop('device',None) #removes device from argsDict to prevent sending extra params
     deviceIds = []
     if ',' in deviceName:
-        deviceNames = []
         deviceNames = deviceName.split(',')
         for x in deviceNames:
             deviceIds.append(deviceData[x])
     encoded = []
-    for key, value in argsdict.items(): #sets up params to send to join
+    for key, value in argsDict.items(): #sets up params to send to join
         if value is not None:
-            encoded.append('&' + key + '=' + urllib.parse.quote_plus(value) + '')
-        if value is None:
-            encoded.append('')
+            encoded.append('&' + key + '=' + urllib.parse.quote_plus(value))
     encodedPush = ''.join(encoded) #finalizes params
     if 'group' in deviceName: #push to send if going to a group
-        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceName + encodedPush + '&apikey=' + deviceData['apikey'] + '')
+        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceName + encodedPush + '&apikey=' + deviceData['apikey'])
     elif deviceIds: #push to send if multiple device names are defined
-        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceIds=' + ",".join(deviceIds) + encodedPush + '&apikey=' + deviceData['apikey'] + '')
+        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceIds=' + ",".join(deviceIds) + encodedPush + '&apikey=' + deviceData['apikey'])
     else: #push to send if going to an individual device
-        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceData[deviceName] + encodedPush + '')
+        urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?deviceId=' + deviceData[deviceName] + encodedPush)
 else:
     print('No device defined.')
