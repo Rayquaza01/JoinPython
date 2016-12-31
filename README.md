@@ -13,8 +13,9 @@ Devices setup:
 2. Choose a device.
 3. Click Join API.
 4. Click the Show button.
-5. Run joinsetup.py and enter the API key shown when requested.
-6. devices.json should be created. End of setup.
+5. Run `joinsetup.py -d` and enter the API key shown when requested.
+6. Choose a default device to be used when the device argument is ommited.
+7. devices.json should be created. End of setup.
 
 Contacts setup:
 
@@ -22,8 +23,16 @@ Contacts setup:
 2. Click more
 3. Click export
 4. Make sure Google CSV is selected and download the CSV file
-5. Place google.csv in join.py's directory and run joinsetup.py
+5. Place google.csv in join.py's directory and run `joinsetup.py -c`
 6. contacts.json should be created. You can delete google.csv. End of setup.
+
+AutoRemote Setup
+
+1. Run `joinsetup.py -a`.
+2. Enter name of the device you want to set up.
+3. Enter the short url for that device. (after the goo.gl)
+4. Repeat 2 & 3 until all devices are accounted for.
+5. arDevices.json should be created. End of setup.
 
 For the best results, add join.py's working directory to your system's path.
 
