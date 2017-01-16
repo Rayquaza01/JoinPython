@@ -1,3 +1,4 @@
+#! python3
 import argparse, urllib.request, urllib.parse, json, os, re
 os.chdir(os.path.dirname(__file__)) # sets a constant working dir
 ##### Argument Parser starts here #####
