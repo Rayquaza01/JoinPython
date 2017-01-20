@@ -1,4 +1,4 @@
-#! python3
+#!/usr/bin/env python3
 import argparse, urllib.request, urllib.parse, json, os, re
 os.chdir(os.path.dirname(__file__)) # sets a constant working dir
 ##### Argument Parser starts here #####
@@ -54,11 +54,14 @@ if opts.smsnumber is not None:
 deviceName = argsDict['device']
 argsDict.pop('device',None) # removes device from argsDict to prevent sending extra params
 if ',' in deviceName: # allows for multiple device names separated by commas
-    deviceIds = []
-    deviceNames = deviceName.split(',')
-    for x in deviceNames:
-        deviceIds.append(deviceData[x])
-    argsDict['deviceIds'] = ','.join('deviceIds')
+    argsDict['deviceNames'] = deviceName
+    argsDict['apikey'] = deviceData['apikey']
+    # Old device Id multiple device code. Now uses beta device name + api key.
+    # deviceIds = []
+    # deviceNames = deviceName.split(',')
+    # for x in deviceNames:
+    #     deviceIds.append(deviceData[x])
+    # argsDict['deviceIds'] = ','.join('deviceIds')
 elif 'group' in deviceName: # allows for groups (group.android, etc.)
     argsDict['deviceId'] = deviceName
     argsDict['apikey'] = deviceData['apikey']
