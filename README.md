@@ -59,7 +59,7 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
 -fi [True] or --find [True]
     Set to true to make your device ring loudly
 -w [Wallpaper URL] or --wallpaper [Wallpaper URL]
-    Set to true to make your device ring loudly
+    URL to an image to set as the target device's wallpaper
 -ti [Title] or --title [Title]
     Title (If set will create notification)
 -te [Text] or --text [Text]
