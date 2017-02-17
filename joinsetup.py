@@ -4,9 +4,8 @@ os.chdir(os.path.dirname(__file__)) # sets a constant working dir
 ap = argparse.ArgumentParser()
 ap.add_argument('-d','--devices',nargs='*')
 ap.add_argument('-c','--contacts',nargs='*')
-ap.add_argument('-a','--autoremote',nargs='*')
 opts = ap.parse_args()
-if opts.devices is None and opts.contacts is None and opts.autoremote is None:
+if opts.devices is None and opts.contacts is None:
     runAll = True
 else:
     runAll = False
@@ -41,7 +40,7 @@ if opts.devices is not None or runAll is True:
     print('')
 if opts.contacts is not None or runAll:
     print('Contacts Setup')
-    print('Export your google contacts csv file into the working directory as contacts.csv')
+    print('Export your google contacts csv file into the working directory as google.csv')
     print('https://www.google.com/contacts/u/0/?cplus=0# contacts is where you can export the file.')
     print('Export the file in the Google format.')
     input('Press enter when this is done or close the window to cancel contacts setup')
@@ -57,25 +56,6 @@ if opts.contacts is not None or runAll:
     with open('contacts.json','w') as f:
         f.write(str(data))
     print('Sucessfully saved contacts data to contacts.json! You can delete google.csv')
-    print('')
-if opts.autoremote is not None or runAll is True:
-    print('Autoremote Setup')
-    print('Enter the short url provided with the autoremote app (after goo.gl)')
-    print('Leave blank to cancel.')
-    arDict = {}
-    while True:
-        name = input('Enter the device\'s name: ')
-        id = input('Enter the device\'s id: ')
-        if name is '':
-            break
-        else:
-            fullURL = urllib.request.urlopen('http://expandurl.com/api/v1/?url=goo.gl/' + id).read()
-            arDeviceId = fullURL.decode('utf-8').split('=')
-            arDict[name] = arDeviceId[1]
-    data = json.dumps(arDict, sort_keys=True, indent=4)
-    with open('arDevices.json','w') as f:
-        f.write(str(data))
-    print('Sucessfully saved Autoremote data to arDevices.json!')
     print('')
 print('For more instructions, view the readme.')
 print('This concludes the setup.')

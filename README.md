@@ -34,14 +34,6 @@ Requires Tasker, AutoTools, and AutoContacts
 2. Run the task
 3. Move `contacts.json` to join.py's directory. (A share dialog will appear to send the file) End of setup.
 
-AutoRemote Setup:
-
-1. Run `joinsetup.py -a`.
-2. Enter name of the device you want to set up.
-3. Enter the short url for that device. (after the goo.gl)
-4. Repeat 2 & 3 until all devices are accounted for.
-5. arDevices.json should be created. End of setup.
-
 For the best results, add join.py's working directory to your system's path.
 
 **Arguments for join.py**
@@ -49,7 +41,7 @@ For the best results, add join.py's working directory to your system's path.
 No arguments need to be surrounded with quotes, but it doesn't hurt.
 
 ```
--d [DeviceName] or --device [DeviceName] !REQUIRED!
+-d [DeviceName] or --device [DeviceName] (Uses pref defined on setup if this is not passed)
     The name of the device the push should go to.
     Accepts groups (group.all, group.android, group.chrome, group.windows10, group.phone,
     group.tablet, group.pc) and multiple device names (Phone,Tablet,Desktop) as well.
