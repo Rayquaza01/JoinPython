@@ -50,9 +50,9 @@ if opts.contacts is not None or runAll:
         read = csv.reader(contacts)
         for row in read:
             if row[31] == 'Mobile':
-                contactsData[row[0]] = re.sub('[^\d+]', '', row[32])
+                contactsData[row[0]] = row[32]
             if row[33] == 'Mobile':
-                contactsData[row[0]] = re.sub('[^\d+]', '', row[34])
+                contactsData[row[0]] = row[34]
     data = json.dumps(contactsData, sort_keys=True, indent=4) # convert to json and write to file
     with open('contacts.json','w') as f:
         f.write(str(data))

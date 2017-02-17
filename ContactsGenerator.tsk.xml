@@ -1,0 +1,139 @@
+<TaskerData sr="" dvi="1" tv="4.9u4m">
+	<Task sr="task115">
+		<cdate>1487358011926</cdate>
+		<edate>1487360736053</edate>
+		<id>115</id>
+		<nme>ContactsGenerator</nme>
+		<pri>100</pri>
+		<Action sr="act0" ve="7">
+			<code>1452528931</code>
+			<Bundle sr="arg0">
+				<Vals sr="val">
+					<com.twofortyfouram.locale.intent.extra.BLURB>Phone Type: Mobile
+Sort Direction: Ascending
+Fields to Get: Phone Number,Name
+Joiner: =:=</com.twofortyfouram.locale.intent.extra.BLURB>
+					<com.twofortyfouram.locale.intent.extra.BLURB-type>java.lang.String</com.twofortyfouram.locale.intent.extra.BLURB-type>
+					<net.dinglisch.android.tasker.JSON_ENCODED_KEYS>parameters</net.dinglisch.android.tasker.JSON_ENCODED_KEYS>
+					<net.dinglisch.android.tasker.JSON_ENCODED_KEYS-type>java.lang.String</net.dinglisch.android.tasker.JSON_ENCODED_KEYS-type>
+					<net.dinglisch.android.tasker.RELEVANT_VARIABLES>&lt;StringArray sr=""&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;%acname
+`First Name
+&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;%acname()
+´Name
+&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES2&gt;%acnumber
+`First Phone Number
+&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES2&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES3&gt;%acnumber()
+´Phone Number
+&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES3&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES4&gt;%err
+Error Code
+Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES4&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES5&gt;%errmsg
+Error Message
+Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES5&gt;&lt;/StringArray&gt;</net.dinglisch.android.tasker.RELEVANT_VARIABLES>
+					<net.dinglisch.android.tasker.RELEVANT_VARIABLES-type>[Ljava.lang.String;</net.dinglisch.android.tasker.RELEVANT_VARIABLES-type>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>parameters plugininstanceid plugintypeid </net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>java.lang.String</net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>
+					<net.dinglisch.android.tasker.subbundled>true</net.dinglisch.android.tasker.subbundled>
+					<net.dinglisch.android.tasker.subbundled-type>java.lang.Boolean</net.dinglisch.android.tasker.subbundled-type>
+					<parameters>{"contactSortDirection":"0","queryAdvanced":{"queryJoiner":"=:="},"queryContactsFieldsToGet":"acnumber,acname","queryFilter":{"contactOnlyPhoneDefault":false,"contactQueryPhoneType":"Mobile","filterAdvanced":{"queryGetEmptyFields":false},"queryContactStarred":false}}</parameters>
+					<parameters-type>java.lang.String</parameters-type>
+					<plugininstanceid>b72e5b1f-87e3-4092-84be-1921d024ff69</plugininstanceid>
+					<plugininstanceid-type>java.lang.String</plugininstanceid-type>
+					<plugintypeid>com.joaomgcd.autocontacts.intent.IntentQuery2</plugintypeid>
+					<plugintypeid-type>java.lang.String</plugintypeid-type>
+				</Vals>
+			</Bundle>
+			<Str sr="arg1" ve="3">com.joaomgcd.autocontacts</Str>
+			<Str sr="arg2" ve="3">com.joaomgcd.autocontacts.activity.ActivityConfigQuery2</Str>
+			<Int sr="arg3" val="60"/>
+		</Action>
+		<Action sr="act1" ve="7">
+			<code>1099157652</code>
+			<Bundle sr="arg0">
+				<Vals sr="val">
+					<DeletePaths>&lt;null&gt;</DeletePaths>
+					<DeletePaths-type>java.lang.String</DeletePaths-type>
+					<DeleteValues>&lt;null&gt;</DeleteValues>
+					<DeleteValues-type>java.lang.String</DeleteValues-type>
+					<FilterField>&lt;null&gt;</FilterField>
+					<FilterField-type>java.lang.String</FilterField-type>
+					<FilterValye>&lt;null&gt;</FilterValye>
+					<FilterValye-type>java.lang.String</FilterValye-type>
+					<JsonAddToArrayKey>&lt;null&gt;</JsonAddToArrayKey>
+					<JsonAddToArrayKey-type>java.lang.String</JsonAddToArrayKey-type>
+					<JsonAddToArrayValues>&lt;null&gt;</JsonAddToArrayValues>
+					<JsonAddToArrayValues-type>java.lang.String</JsonAddToArrayValues-type>
+					<JsonArrayClear>false</JsonArrayClear>
+					<JsonArrayClear-type>java.lang.Boolean</JsonArrayClear-type>
+					<JsonArrayObjectKeys>&lt;null&gt;</JsonArrayObjectKeys>
+					<JsonArrayObjectKeys-type>java.lang.String</JsonArrayObjectKeys-type>
+					<JsonArrayObjectValues>&lt;null&gt;</JsonArrayObjectValues>
+					<JsonArrayObjectValues-type>java.lang.String</JsonArrayObjectValues-type>
+					<JsonArrayObjectValuesSeparator>&lt;null&gt;</JsonArrayObjectValuesSeparator>
+					<JsonArrayObjectValuesSeparator-type>java.lang.String</JsonArrayObjectValuesSeparator-type>
+					<JsonInput>&lt;null&gt;</JsonInput>
+					<JsonInput-type>java.lang.String</JsonInput-type>
+					<JsonKeys>%acname()</JsonKeys>
+					<JsonKeys-type>java.lang.String</JsonKeys-type>
+					<JsonResultPretty>true</JsonResultPretty>
+					<JsonResultPretty-type>java.lang.Boolean</JsonResultPretty-type>
+					<JsonResultVariable>atjsonresult</JsonResultVariable>
+					<JsonResultVariable-type>java.lang.String</JsonResultVariable-type>
+					<JsonValues>%acnumber()</JsonValues>
+					<JsonValues-type>java.lang.String</JsonValues-type>
+					<MatchesCaseInsensitive>false</MatchesCaseInsensitive>
+					<MatchesCaseInsensitive-type>java.lang.Boolean</MatchesCaseInsensitive-type>
+					<MatchesCaseInsensitive_delete>false</MatchesCaseInsensitive_delete>
+					<MatchesCaseInsensitive_delete-type>java.lang.Boolean</MatchesCaseInsensitive_delete-type>
+					<MatchesContainsAll>false</MatchesContainsAll>
+					<MatchesContainsAll-type>java.lang.Boolean</MatchesContainsAll-type>
+					<MatchesContainsAll_delete>false</MatchesContainsAll_delete>
+					<MatchesContainsAll_delete-type>java.lang.Boolean</MatchesContainsAll_delete-type>
+					<MatchesExact>false</MatchesExact>
+					<MatchesExact-type>java.lang.Boolean</MatchesExact-type>
+					<MatchesExact_delete>false</MatchesExact_delete>
+					<MatchesExact_delete-type>java.lang.Boolean</MatchesExact_delete-type>
+					<MatchesRegex>false</MatchesRegex>
+					<MatchesRegex-type>java.lang.Boolean</MatchesRegex-type>
+					<MatchesRegex_delete>false</MatchesRegex_delete>
+					<MatchesRegex_delete-type>java.lang.Boolean</MatchesRegex_delete-type>
+					<Separator>,</Separator>
+					<Separator-type>java.lang.String</Separator-type>
+					<UpdatePaths>&lt;null&gt;</UpdatePaths>
+					<UpdatePaths-type>java.lang.String</UpdatePaths-type>
+					<UpdateValues>&lt;null&gt;</UpdateValues>
+					<UpdateValues-type>java.lang.String</UpdateValues-type>
+					<com.twofortyfouram.locale.intent.extra.BLURB>Separator: ,
+Json Keys: %acname()
+Json Values: %acnumber()
+Prettify: true</com.twofortyfouram.locale.intent.extra.BLURB>
+					<com.twofortyfouram.locale.intent.extra.BLURB-type>java.lang.String</com.twofortyfouram.locale.intent.extra.BLURB-type>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>JsonKeys JsonValues JsonResultVariable Separator plugininstanceid plugintypeid </net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>java.lang.String</net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>
+					<net.dinglisch.android.tasker.subbundled>true</net.dinglisch.android.tasker.subbundled>
+					<net.dinglisch.android.tasker.subbundled-type>java.lang.Boolean</net.dinglisch.android.tasker.subbundled-type>
+					<plugininstanceid>ad98efa6-6559-41ce-b9d1-570c7f771a7e</plugininstanceid>
+					<plugininstanceid-type>java.lang.String</plugininstanceid-type>
+					<plugintypeid>com.joaomgcd.autotools.intent.IntentJsonWrite</plugintypeid>
+					<plugintypeid-type>java.lang.String</plugintypeid-type>
+				</Vals>
+			</Bundle>
+			<Str sr="arg1" ve="3">com.joaomgcd.autotools</Str>
+			<Str sr="arg2" ve="3">com.joaomgcd.autotools.activity.ActivityConfigJsonWrite</Str>
+			<Int sr="arg3" val="60"/>
+		</Action>
+		<Action sr="act2" ve="7">
+			<code>410</code>
+			<Str sr="arg0" ve="3">contacts.json</Str>
+			<Str sr="arg1" ve="3">%atjsonresult</Str>
+			<Int sr="arg2" val="0"/>
+			<Int sr="arg3" val="1"/>
+		</Action>
+		<Action sr="act3" ve="7">
+			<code>376</code>
+			<Str sr="arg0" ve="3">contacts.json</Str>
+			<Str sr="arg1" ve="3">text/plain</Str>
+			<Int sr="arg2" val="0"/>
+			<Str sr="arg3" ve="3"/>
+		</Action>
+	</Task>
+</TaskerData>

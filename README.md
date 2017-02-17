@@ -1,7 +1,7 @@
 # JoinPython
 A python script that allows for pushing to Join by Joaoapps from the command line.
 
-*Note*
+**Note**
 
 Requires: Python 3 and a Join account
 
@@ -26,7 +26,15 @@ Contacts setup:
 5. Place google.csv in join.py's directory and run `joinsetup.py -c`
 6. contacts.json should be created. You can delete google.csv. End of setup.
 
-AutoRemote Setup
+OR
+
+Requires Tasker, AutoTools, and AutoContacts
+
+1. Add `ContactsGenerator.tsk.xml` to Tasker
+2. Run the task
+3. Move `contacts.json` to join.py's directory. (A share dialog will appear to send the file) End of setup.
+
+AutoRemote Setup:
 
 1. Run `joinsetup.py -a`.
 2. Enter name of the device you want to set up.
@@ -36,7 +44,7 @@ AutoRemote Setup
 
 For the best results, add join.py's working directory to your system's path.
 
-*Arguments for join.py*
+**Arguments for join.py**
 
 No arguments need to be surrounded with quotes, but it doesn't hurt.
 
