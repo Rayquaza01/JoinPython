@@ -36,10 +36,8 @@ if opts.smsnumber is not None:
     try: # loads the contacts json as a dictionary if a number or name is supplied.
         with open('contacts.json','r') as contact:
             contactData = json.loads(contact.read())
-        # argsDict['smsnumber'] = contactData[argsDict['smsnumber']] # replaces the name with the number
     except: # defaults to a number if a name is not found in the json
         pass
-        # print('No contact names found. Assuming smsn is a number. Run joinsetup.py -c for instructions on using names.')
     if argsDict['smsnumber'] in contactData:
         argsDict['smsnumber'] = contactData[argsDict['smsnumber']] # replaces the name with the number
     else:
@@ -70,5 +68,5 @@ else: # allows for single device
 encoded = []
 for key, value in argsDict.items():
     if value is not None:
-        encoded.append(key + '=' + urllib.parse.quote_plus(value))
+        encoded.append('='.join([key, urllib.parse.quote_plus(value)]))
 urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?' + '&'.join(encoded))
