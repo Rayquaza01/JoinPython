@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import urllib.request, json, csv, os, argparse, re, platform
+import urllib.request, json, csv, os, argparse, re
 os.chdir(os.path.dirname(__file__)) # sets a constant working dir
 ap = argparse.ArgumentParser()
 ap.add_argument('-d','--devices',nargs='*')
