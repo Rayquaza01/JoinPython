@@ -4,6 +4,7 @@ os.chdir(os.path.dirname(__file__)) # sets a constant working dir
 ap = argparse.ArgumentParser()
 ap.add_argument('-d','--devices',nargs='*')
 ap.add_argument('-c','--contacts',nargs='*')
+ap.add_argument('-f','--firstrun',nargs='*')
 opts = ap.parse_args()
 if opts.devices is None and opts.contacts is None and opts.firstrun is None:
     runAll = True
