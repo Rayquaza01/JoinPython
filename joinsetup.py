@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-import urllib.request, json, csv, os, argparse, re
+import urllib.request, json, csv, os, argparse, re, platform
 os.chdir(os.path.dirname(__file__)) # sets a constant working dir
 ap = argparse.ArgumentParser()
 ap.add_argument('-d','--devices',nargs='*')
 ap.add_argument('-c','--contacts',nargs='*')
 opts = ap.parse_args()
-if opts.devices is None and opts.contacts is None:
+if opts.devices is None and opts.contacts is None and opts.firstrun is None:
     runAll = True
 else:
     runAll = False
@@ -24,7 +24,7 @@ if opts.devices is not None or runAll is True:
         apikey = apikeyOld
     devices = urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=' + apikey + '').read()
     data = json.loads(devices.decode('utf-8'))
-    deviceData ={}
+    deviceData = {}
     deviceData['apikey'] = apikey
     for x in data['records']: # converts json to dict to simplify it
         deviceData[x['deviceName']] = x['deviceId']

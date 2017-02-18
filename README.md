@@ -7,34 +7,11 @@ Requires: Python 3 and a Join account
 
 Only tested on Windows and Bash on Windows. Should work with other systems, though.
 
-Devices setup:
+[Installation Instructions](https://github.com/Rayquaza01/JoinPython/wiki/Installation)
 
-1. Go to the [Join web-interface](https://joinjoaomgcd.appspot.com/)
-2. Choose a device.
-3. Click Join API.
-4. Click the Show button.
-5. Run `joinsetup.py -d` and enter the API key shown when requested.
-6. Choose a default device to be used when the device argument is ommited.
-7. devices.json should be created. End of setup.
+[Contacts Setup](https://github.com/Rayquaza01/JoinPython/wiki/Contacts-Setup)
 
-Contacts setup:
-
-1. Go to [Google Contacts](https://www.google.com/contacts/u/0/?cplus=0#contacts) (Old view is needed. Preview doesn't support exporting)
-2. Click more
-3. Click export
-4. Make sure Google CSV is selected and download the CSV file
-5. Place google.csv in join.py's directory and run `joinsetup.py -c`
-6. contacts.json should be created. You can delete google.csv. End of setup.
-
-OR
-
-Requires Tasker, AutoTools, and AutoContacts
-
-1. Add `ContactsGenerator.tsk.xml` to Tasker
-2. Run the task
-3. Move `contacts.json` to join.py's directory. (A share dialog will appear to send the file) End of setup.
-
-For the best results, add join.py's working directory to your system's path.
+[Escape Characters](https://github.com/Rayquaza01/JoinPython/wiki/Escape-Characters)
 
 **Arguments for join.py**
 
@@ -74,5 +51,3 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
     Vibration for when the notification is recived. Generate the pattern at
     http://autoremotejoaomgcd.appspot.com/AutoRemoteNotification.html
 ```
-
-Make sure to escape quotes (\") in order to push them!
