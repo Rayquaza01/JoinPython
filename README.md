@@ -33,10 +33,14 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
     Contact names can be used if contacts setup is completed.
 -smst [SMS Text] or --smstext [SMS Text]
     Some text to send in an SMS. If you want to set an SMS you need to set this and the smsnumber values
+-mms [MMS file] or --mmsfile [MMS file]
+    A file to send in a MMS. smsnumber must be set for this to take affect.
 -fi [True] or --find [True]
     Set to true to make your device ring loudly
 -w [Wallpaper URL] or --wallpaper [Wallpaper URL]
     URL to an image to set as the target device's wallpaper
+-lw [Wallpaper URL] or --lockWallpaper [Wallpaper URL]
+    URL to an image to set as the target device's lockscreen wallpaper (Android 7 or above)
 -ti [Title] or --title [Title]
     Title (If set will create notification)
 -te [Text] or --text [Text]

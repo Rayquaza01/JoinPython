@@ -17,6 +17,8 @@ ap.add_argument('-smsn','--smsnumber',help='Phone number to send an SMS to. If y
 ap.add_argument('-smst','--smstext',help='Some text to send in an SMS. If you want to set an SMS you need to set this and the smsnumber values',nargs='*')
 ap.add_argument('-fi','--find',help='Set to true to make your device ring loudly')
 ap.add_argument('-w','--wallpaper',help='A publicly accessible URL of an image file. Will set the wallpaper on the receiving device')
+ap.add_argument('-mms','--mmsfile',help='MMS file. smsnumber must be set for this to have an affect')
+ap.add_argument('-lw','--lockWallpaper',help='The wallpaper to set on the lockscreen (Android 7+), must be publicly accessible URL')
 opts = ap.parse_args()
 ##### Argument Parser ends here #####
 try: # loads device json into a dictionary
