@@ -53,9 +53,9 @@ if opts.smsnumber is not None:
             argsDict['smstext'] = None
 deviceName = argsDict['device']
 argsDict.pop('device',None) # removes device from argsDict to prevent sending extra params
+argsDict['apikey'] = deviceData['apikey'] # https://plus.google.com/+Jo%C3%A3oDias/posts/GYwEvtSb238
 if ',' in deviceName: # allows for multiple device names separated by commas
     argsDict['deviceNames'] = deviceName
-    argsDict['apikey'] = deviceData['apikey']
     # Old device Id multiple device code. Now uses beta device name + api key.
     # deviceIds = []
     # deviceNames = deviceName.split(',')
@@ -64,7 +64,6 @@ if ',' in deviceName: # allows for multiple device names separated by commas
     # argsDict['deviceIds'] = ','.join('deviceIds')
 elif 'group' in deviceName: # allows for groups (group.android, etc.)
     argsDict['deviceId'] = deviceName
-    argsDict['apikey'] = deviceData['apikey']
 else: # allows for single device
     argsDict['deviceId'] = deviceData[deviceName]
 encoded = []
