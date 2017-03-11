@@ -35,6 +35,8 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
     Some text to send in an SMS. If you want to set an SMS you need to set this and the smsnumber values
 -mms [MMS file] or --mmsfile [MMS file]
     A file to send in a MMS. smsnumber must be set for this to take affect.
+-cn [Contact Name or Number] or --callnumber [Contact Name or Number]
+    A phone number to call on the target device
 -fi [True] or --find [True]
     Set to true to make your device ring loudly
 -w [Wallpaper URL] or --wallpaper [Wallpaper URL]
