@@ -4,7 +4,6 @@ import urllib.request
 import urllib.parse
 import json
 import os
-import re
 os.chdir(os.path.dirname(__file__))   # sets a constant working dir
 # Argument Parser starts here
 ap = argparse.ArgumentParser()
@@ -69,28 +68,9 @@ if opts.smsnumber or opts.callnumber is not None:
 if opts.smsnumber is not None:
     if argsDict['smsnumber'] in contactData:
         argsDict['smsnumber'] = contactData[argsDict['smsnumber']]
-    else:
-        clean = re.sub('[^\d+]', '', argsDict['smsnumber'])
-        if re.match('\+?\d{10,}', clean):
-            argsDict['smsnumber'] = clean
-        else:
-            print('Not a valid name or number. SMS cancelled.')
-            print('Make sure the number is valid or, if a name was used, run '
-                  'joinsetup.py -c to set up name support.')
-            argsDict['smsnumber'] = None
-            argsDict['smstext'] = None
 if opts.callnumber is not None:
     if argsDict['callnumber'] in contactData:
         argsDict['callnumber'] = contactData[argsDict['callnumber']]
-    else:
-        clean = re.sub('[^\d+]', '', argsDict['callnumber'])
-        if re.match('\+?\d{10,}', clean):
-            argsDict['callnumber'] = clean
-        else:
-            print('Not a valid name or number. Phone call canceled.')
-            print('Make sure the number is valid or, if a name was used, run '
-                  'joinsetup.py -c to set up name support.')
-            argsDict['callnumber'] = None
 deviceName = argsDict['device']
 argsDict.pop('device', None)  # removes device to prevent sending extra params
 argsDict['apikey'] = deviceData['apikey']
