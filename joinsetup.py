@@ -8,12 +8,7 @@ os.chdir(os.path.dirname(__file__))  # sets a constant working dir
 ap = argparse.ArgumentParser()
 ap.add_argument('-d', '--devices',  nargs='*')
 ap.add_argument('-c', '--contacts', nargs='*')
-ap.add_argument('-f', '--firstrun', nargs='*')
 opts = ap.parse_args()
-if opts.devices is None and opts.contacts is None and opts.firstrun is None:
-    runAll = True
-else:
-    runAll = False
 try:
     with open('devices.json', 'r') as deviceJSON:
         deviceDataOld = json.loads(deviceJSON.read())
@@ -21,7 +16,7 @@ try:
         prefOld = deviceDataOld['pref']
 except:
     pass
-if opts.devices is not None or runAll is True:
+if opts.devices is not None:
     print('Devices Setup')
     print('An API key is needed. Get your key at '
           'https://joinjoaomgcd.appspot.com/')
@@ -47,7 +42,7 @@ if opts.devices is not None or runAll is True:
         f.write(str(data))
     print('Sucessfully saved device data to devices.json!')
     print('')
-if opts.contacts is not None or runAll:
+if opts.contacts is not None:
     print('Contacts Setup')
     print('Export your google contacts csv file into the working directory as '
           'google.csv')
