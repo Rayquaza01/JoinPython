@@ -23,6 +23,13 @@ ap.add_argument('-v', '--vibration', help='Vibration for when the '
                 'http://autoremotejoaomgcd.appspot.com/AutoRemoteNotification.'
                 'html')
 ap.add_argument('-u', '--url', help='URL')
+ap.add_argument('-so', '--sound', help='Sound URI - publicly accessible URL or'
+                'local file URI; used whenever a notification is created')
+ap.add_argument('-im', '--image', help='Image URI - publicly accessible URL or'
+                'local file URI; used whenever a notification is created')
+ap.add_argument('-g', '--group', help='Notification Group (Android 7 and above'
+                ') - allows you to join notifications in different groups',
+                nargs='*')
 ap.add_argument('-c', '--clipboard', help='Clipboard', nargs='*')
 ap.add_argument('-f', '--file', help='File (must be a publicly accessible '
                 'URL)')
@@ -44,6 +51,15 @@ ap.add_argument('-mms', '--mmsfile', help='MMS file. smsnumber must be set '
                 'for this to have an affect')
 ap.add_argument('-lw', '--lockWallpaper', help='The wallpaper to set on the '
                 'lockscreen (Android 7+), must be publicly accessible URL')
+ap.add_argument('-if', '--interruptionFilter', help='Interruption Mode'
+                '(1: Show All, 2: Priority Only, 3: Total Silence, 4: Alarms'
+                'Only', type=int, choices=range(1, 5))
+ap.add_argument('-mv', '--mediaVolume', help='Media Volume - number from 0 to'
+                '15', type=int, choices=range(0, 16))
+ap.add_argument('-av', '--alarmVolume', help='Media Volume - number from 0 to'
+                '7', type=int, choices=range(0, 8))
+ap.add_argument('-rv', '--ringVolume', help='Ringer Volume - number from 0 to'
+                '7', type=int, choices=range(0, 8))
 opts = ap.parse_args()
 # Argument Parser ends here
 try:  # loads device json into a dictionary
@@ -84,6 +100,6 @@ else:  # allows for single device
 encoded = []
 for key, value in argsDict.items():
     if value is not None:
-        encoded.append('='.join([key, urllib.parse.quote_plus(value)]))
+        encoded.append('='.join([key, urllib.parse.quote_plus(str(value))]))
 urllib.request.urlopen('https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/'
                        'sendPush?' + '&'.join(encoded))

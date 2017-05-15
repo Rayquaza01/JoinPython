@@ -51,6 +51,12 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
     Text (Tasker Command or notification text)
 -i [Icon URL] or --icon [Icon URL]
     Icon URI (publicly accessible URL or local file URI; used whenever a notification is created)
+-im [Image URL] or --image [Image Url]
+    Image URI - publicly accessible URL or local file URI; used whenever a notification is created
+-so [Sound URL] or --sound [Sound URL]
+    Sound URI - publicly accessible URL or local file URI; used whenever a notification is created
+-g [Group] --group [Group]
+    Notification Group (Android 7 and above) - allows you to join notifications in different groups
 -s [Icon URL] or --smallicon [Icon URL]
     Icon URI to be used as the statusbar icon (Android 6.0 and above)
 -p [Priority] or --priority [Priority]
@@ -58,4 +64,13 @@ No arguments need to be surrounded with quotes, but it doesn't hurt.
 -v [Vibration Pattern] or --vibration [Vibration Pattern]
     Vibration for when the notification is recived. Generate the pattern at
     http://autoremotejoaomgcd.appspot.com/AutoRemoteNotification.html
+-if [Interruption Mode] or --interruptionFilter [Interruption Mode]
+    Interruption mode from 1 to 4
+    1: Show All, 2: Priority Only, 3: Total Silence, 4: Alarms Only
+-mv [Media Volume] -mediaVolume [Media Volume]
+    Media Volume - number from 0 to 15
+-av [Alarm Volume] --alarmVolume [Alarm Volume]
+    Alarm Volume - Number from 0 to 7
+-rv [Ringer Volume] --ringVolume [Ringer Volume]
+    Ringer Volume - Number from 0 to 7
 ```
