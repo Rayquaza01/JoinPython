@@ -4,19 +4,17 @@ import json
 import csv
 import os
 import argparse
-os.chdir(os.path.dirname(__file__))  # sets a constant working dir
-ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--devices",  nargs="*")
-ap.add_argument("-c", "--contacts", nargs="*")
-opts = ap.parse_args()
-try:
-    with open("devices.json", "r") as deviceJSON:
-        deviceDataOld = json.loads(deviceJSON.read())
-        apikeyOld = deviceDataOld["apikey"]
-        prefOld = deviceDataOld["pref"]
-except:
-    pass
-if opts.devices is not None:
+
+
+def devices(apikeyOld, prefOld):
+    if os.path.isfile("devices.json"):
+        with open("devices.json", "r") as deviceJSON:
+            deviceDataOld = json.loads(deviceJSON.read())
+            apikeyOld = deviceDataOld["apikey"]
+            prefOld = deviceDataOld["pref"]
+    else:
+        apikeyOld = ""
+        prefOld = ""
     print("Devices Setup")
     print("An API key is needed. Get your key at "
           "https://joinjoaomgcd.appspot.com/")
@@ -42,7 +40,9 @@ if opts.devices is not None:
         f.write(str(data))
     print("Sucessfully saved device data to devices.json!")
     print("")
-if opts.contacts is not None:
+
+
+def contacts():
     print("Contacts Setup")
     print("Export your google contacts csv file into the working directory as "
           "google.csv")
@@ -52,8 +52,8 @@ if opts.contacts is not None:
     input("Press enter when this is done or close the window to cancel "
           "contacts setup")
     contactsData = {}
-    with open("google.csv", "r") as contacts:
-        read = csv.reader(contacts)
+    with open("google.csv", "r") as c:
+        read = csv.reader(c)
         for row in read:
             if row[31] == "Mobile":
                 contactsData[row[0]] = row[32]
@@ -65,6 +65,22 @@ if opts.contacts is not None:
     print("Sucessfully saved contacts data to contacts.json! "
           "You can delete google.csv")
     print("")
-print("For more instructions, view the readme.")
-print("This concludes the setup.")
-input("Press enter or close the window.")
+
+
+def main():
+    os.chdir(os.path.dirname(__file__))  # sets a constant working dir
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-d", "--devices",  nargs="*")
+    ap.add_argument("-c", "--contacts", nargs="*")
+    opts = ap.parse_args()
+    if opts.devices is not None:
+        devices()
+    if opts.contacts is not None:
+        contacts()
+    print("For more instructions, view the readme.")
+    print("This concludes the setup.")
+    input("Press enter or close the window.")
+
+
+if __name__ == "__main__":
+    main()
