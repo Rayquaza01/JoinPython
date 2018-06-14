@@ -40,6 +40,7 @@ def arguments(argue):
     ap.add_argument("-mv", "--mediaVolume", help="Media Volume - number from 0 to 15", type=int, choices=range(0, 16))
     ap.add_argument("-av", "--alarmVolume", help="Media Volume - number from 0 to 7", type=int, choices=range(0, 8))
     ap.add_argument("-rv", "--ringVolume", help="Ringer Volume - number from 0 to 7", type=int, choices=range(0, 8))
+    ap.add_argument("-gu", "--generateURL", help="Print push url rather than actually pushing", action="store_true")
     return ap.parse_args(argue)
 
 
@@ -64,6 +65,8 @@ def contacts(contactsFile):
 
 
 def request(args, devices, contacts={}):
+    generateURL = args["generateURL"]
+    args.pop("generateURL", None)
     if args["device"] is None:
         args["device"] = devices["pref"]
     for key, value in args.items():  # fixes the need to encase args in quotes
@@ -89,9 +92,11 @@ def request(args, devices, contacts={}):
     for key, value in args.items():
         if value is not None:
             encoded.append("=".join([key, urllib.parse.quote_plus(str(value))]))
-    return urllib.request.urlopen("https://joinjoaomgcd.appspot.com/_ah/api/"
-                                  "messaging/v1/sendPush?" +
-                                  "&".join(encoded)).read().decode("utf-8")
+    url = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?" + "&".join(encoded)
+    if generateURL:
+        return url
+    else:
+        return urllib.request.urlopen(url).read().decode("utf-8")
 
 
 def main():
@@ -102,7 +107,7 @@ def main():
         contactData = contacts(cwd + "/contacts.json")
     else:
         contactData = {}
-    request(opts, deviceData, contactData)
+    print(request(opts, deviceData, contactData))
 
 
 if __name__ == "__main__":
