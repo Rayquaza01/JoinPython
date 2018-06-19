@@ -31,7 +31,7 @@ def arguments(argue):
     ap.add_argument("-cn", "--callnumber", nargs="*", help="A number to call")
     ap.add_argument("-smst", "--smstext", help="Some text to send in an SMS. If you want to set an SMS you need to set this and the "
                     "smsnumber values", nargs="*")
-    ap.add_argument("-fi", "--find", help="Set to true to make your device ring loudly")
+    ap.add_argument("-fi", "--find", help="Set to true to make your device ring loudly", action="store_true")
     ap.add_argument("-w", "--wallpaper", help="A publicly accessible URL of an image file. Will set the wallpaper on the receiving device")
     ap.add_argument("-mms", "--mmsfile", help="MMS file. smsnumber must be set for this to have an affect")
     ap.add_argument("-lw", "--lockWallpaper", help="The wallpaper to set on the lockscreen (Android 7+), must be publicly accessible URL")
@@ -78,6 +78,10 @@ def request(args, devices, contacts={}):
     if args["callnumber"] is not None:
         if args["callnumber"] in contacts:
             args["callnumber"] = contacts[args["callnumber"]]
+    if args["find"]:
+        args["find"] = "true"
+    else:
+        args.pop("find", None)
     deviceName = args["device"]
     args.pop("device", None)  # removes device to prevent sending extra params
     args["apikey"] = devices["apikey"]
