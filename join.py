@@ -21,9 +21,9 @@ def setup():
     apikey = input("Enter your key (leave blank to reuse pre-existing key): ")
     if apikey == "":  # allows for using a pre-existing key
         apikey = apikeyOld
-    devices = urllib.request.urlopen("https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" +
-                                     apikey).read().decode("utf-8")
-    data = json.loads(devices)
+    url = "https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" + apikey
+    deviceJSON = urllib.request.urlopen(url).read().decode("utf-8")
+    data = json.loads(deviceJSON)
     deviceData = {}
     deviceData["apikey"] = apikey
     for x in data["records"]:  # converts json to dict to simplify it
@@ -60,8 +60,9 @@ def arguments(argue):
                     "See https://joaoapps.com/join/actions/#notifications", nargs="*")
     ap.add_argument("-c", "--clipboard", help="Clipboard", nargs="*")
     ap.add_argument("-f", "--file", help="File (must be a publicly accessible URL)")
-    ap.add_argument("-d", "--device", help="The device name or a group (group.all, group.android, group.chrome, group.windows10, group."
+    ap.add_argument("-d", "--deviceId", help="The device name or a group (group.all, group.android, group.chrome, group.windows10, group."
                     "phone, group.tablet, group.pc)", nargs="*")
+    ap.add_argument("-api", "--apikey", help="Your Join API key", nargs="?")
     ap.add_argument("-smsn", "--smsnumber", help="Phone number to send an SMS to. If you want to set an SMS you need to set this and the "
                     "smstext values", nargs="*")
     ap.add_argument("-cn", "--callnumber", nargs="*", help="A number to call")
@@ -97,9 +98,7 @@ def devices(deviceFile):
         with open(deviceFile, "r") as device:
             deviceData = json.loads(device.read())
     else:
-        setup()
-        with open(deviceFile, "r") as device:
-            deviceData = json.loads(device.read())
+        deviceData = {}
     return deviceData
 
 
@@ -112,43 +111,45 @@ def contacts(contactsFile):
     return contactData
 
 
-def request(args, devices, contacts={}):
-    generateURL = args["generateURL"]
+def request(args, deviceData={"pref": ""}, contacts={}):
+    tempArgs = args.copy()
+    for value in tempArgs:
+        if tempArgs[value] is None or not tempArgs[value]:
+            args.pop(value, None)  # Pop none parameters
+    if "generateURL" in args:
+        generateURL = True
+    else:
+        generateURL = False
     args.pop("generateURL", None)
     args.pop("setup", None)
-    if args["device"] is None:
-        args["device"] = devices["pref"]
+    if "deviceId" not in args:
+        args["deviceId"] = deviceData["pref"]
     for key, value in args.items():  # fixes the need to encase args in quotes
         if type(value) is list:
             args[key] = " ".join(value)
-    if args["smsnumber"] is not None:
+    if "smsnumber" in args:
         if args["smsnumber"] in contacts:
             args["smsnumber"] = contacts[args["smsnumber"]]
-    if args["callnumber"] is not None:
+    if "callnumber" in args:
         if args["callnumber"] in contacts:
             args["callnumber"] = contacts[args["callnumber"]]
-    if args["find"]:
+    if "find" in args:
         args["find"] = "true"
-    else:
-        args.pop("find", None)
-    if args["mmsurgent"]:
+    if "mmsurgent" in args:
         args["mmsurgent"] = "1"
-    else:
-        args.pop("mmsurgent", None)
-    deviceName = args["device"]
-    args.pop("device", None)  # removes device to prevent sending extra params
-    args["apikey"] = devices["apikey"]
+    if "apikey" not in args:
+        args["apikey"] = deviceData["apikey"]
     # https://plus.google.com/+Jo%C3%A3oDias/posts/GYwEvtSb238
-    if "," in deviceName:  # allows for multiple device names separated by commas
-        args["deviceNames"] = deviceName
-    elif "group" in deviceName:  # allows for groups (group.android, etc.)
-        args["deviceId"] = deviceName
-    else:  # allows for single device
-        args["deviceId"] = devices[deviceName]
+    if "," in args["deviceId"]:  # allows for multiple device names separated by commas
+        args["deviceNames"] = args["deviceId"]
+        args.pop("deviceId", None)
+    elif "group" in args["deviceId"]:  # allows for groups (group.android, etc.)
+        args["deviceId"] = args["deviceId"]
+    elif args["deviceId"] in deviceData:  # allows for single device
+        args["deviceId"] = deviceData[args["deviceId"]]
     encoded = []
     for key, value in args.items():
-        if value is not None:
-            encoded.append("=".join([key, urllib.parse.quote_plus(str(value))]))
+        encoded.append("=".join([key, urllib.parse.quote_plus(str(value))]))
     url = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?" + "&".join(encoded)
     if generateURL:
         return url
@@ -158,6 +159,7 @@ def request(args, devices, contacts={}):
 
 def main():
     cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
+    os.chdir(cwd)
     opts = vars(arguments(sys.argv[1:]))
     if opts["setup"]:
         setup()

@@ -3,74 +3,50 @@ A python script that allows for pushing to Join by Joaoapps from the command lin
 
 https://gfycat.com/SentimentalHiddenChick
 
-**Note**
-
-Requires: Python 3 and a Join account
-
-Only tested on Windows and Bash on Windows. Should work with other systems, though.
-
-[Installation Instructions](https://github.com/Rayquaza01/JoinPython/wiki/Installation)
-
-[Contacts Setup](https://github.com/Rayquaza01/JoinPython/wiki/Contacts-Setup)
-
-[Escape Characters](https://github.com/Rayquaza01/JoinPython/wiki/Escape-Characters)
-
-**Arguments for join.py**
-
-No arguments need to be surrounded with quotes, but it doesn't hurt.
-
+## Requires
+ * Python3
+ * A Join Account
+## Setup
+ * Download JoinPython somewhere on your computer.
+   * You can download it here: https://github.com/Rayquaza01/JoinPython/archive/master.zip
+   * You can also run `git clone https://github.com/Rayquaza01/JoinPython` if that's more your style
+   * It may be helpful to add the folder it's in to your path
+ * Run `join.py --setup` to start the setup
+   * Setup can be skipped if you pass `--deviceId` and `--apikey` parameters to the script. Setup is for convenience only.
+   * Enter your Join API key when requested
+   * Choose a device to default to when you omit the `--deviceId` argument
+   * A file named `devices.json` will be created in the same directory that contains all of your device ids and API key.
+   * `--deviceId` can be a device name if you complete setup, must be an ID otherwise.
+### Contacts Setup
+The `--smsnumber` and `--callnumber` arguments take a phone number to be used by Join. You can create a file named `contacts.json` with contact names to allow these arguments to take a name instead.  
+The file should look something like this:
 ```
--d [DeviceName] or --device [DeviceName] (Uses pref defined on setup if this is not passed)
-    The name of the device the push should go to.
-    Accepts groups (group.all, group.android, group.chrome, group.windows10, group.phone,
-    group.tablet, group.pc) and multiple device names (Phone,Tablet,Desktop) as well.
--c [Clipboard] or --clipboard [Clipboard]
-    Clipboard
--u [URL] or --url [URL]
-    URL
--f [File URL] or --file [File URL]
-    File (must be a publicly accessible URL)
--smsn [Contact Name or Number] or --smsnumber [Contact Name or Number]
-    Phone number to send an SMS to. If you want to set an SMS you need to set this and the smstext values.
-    Contact names can be used if contacts setup is completed.
--smst [SMS Text] or --smstext [SMS Text]
-    Some text to send in an SMS. If you want to set an SMS you need to set this and the smsnumber values
--mms [MMS file] or --mmsfile [MMS file]
-    A file to send in a MMS. smsnumber must be set for this to take affect.
--cn [Contact Name or Number] or --callnumber [Contact Name or Number]
-    A phone number to call on the target device
--fi [True] or --find [True]
-    Set to true to make your device ring loudly
--w [Wallpaper URL] or --wallpaper [Wallpaper URL]
-    URL to an image to set as the target device's wallpaper
--lw [Wallpaper URL] or --lockWallpaper [Wallpaper URL]
-    URL to an image to set as the target device's lockscreen wallpaper (Android 7 or above)
--ti [Title] or --title [Title]
-    Title (If set will create notification)
--te [Text] or --text [Text]
-    Text (Tasker Command or notification text)
--i [Icon URL] or --icon [Icon URL]
-    Icon URI (publicly accessible URL or local file URI; used whenever a notification is created)
--im [Image URL] or --image [Image Url]
-    Image URI - publicly accessible URL or local file URI; used whenever a notification is created
--so [Sound URL] or --sound [Sound URL]
-    Sound URI - publicly accessible URL or local file URI; used whenever a notification is created
--g [Group] --group [Group]
-    Notification Group (Android 7 and above) - allows you to join notifications in different groups
--s [Icon URL] or --smallicon [Icon URL]
-    Icon URI to be used as the statusbar icon (Android 6.0 and above)
--p [Priority] or --priority [Priority]
-    Priority of the notification from -2 (lowest) to 2 (highest) (Default is 2)
--v [Vibration Pattern] or --vibration [Vibration Pattern]
-    Vibration for when the notification is recived. Generate the pattern at
-    http://autoremotejoaomgcd.appspot.com/AutoRemoteNotification.html
--if [Interruption Mode] or --interruptionFilter [Interruption Mode]
-    Interruption mode from 1 to 4
-    1: Show All, 2: Priority Only, 3: Total Silence, 4: Alarms Only
--mv [Media Volume] -mediaVolume [Media Volume]
-    Media Volume - number from 0 to 15
--av [Alarm Volume] --alarmVolume [Alarm Volume]
-    Alarm Volume - Number from 0 to 7
--rv [Ringer Volume] --ringVolume [Ringer Volume]
-    Ringer Volume - Number from 0 to 7
+{
+    "Name 1": "5555555555",
+    "Name 2": "(555) 555-5555",
+    "Name 3": "+1 555.555.5555"
+}
+```
+The actual formatting of the numbers is unimportant; Join should be able to handle most formats.  
+You can also use [this Tasker task](https://raw.githubusercontent.com/Rayquaza01/JoinPython/master/ContactsGenerator.tsk.xml) to pull the numbers from your phone's contacts (Requires Tasker, AutoTools, and AutoContacts to run)
+## Usage
+Run `join.py` with arguments corresponding to what you want to do. Arguments correspond directly to [the Join API](https://joaoapps.com/join/api/) (Ex: The clipboard parameter is `--clipboard`). `join.py --help` gives a list of accepted arguments.
+### Irregularities
+ * The `deviceNames` parameter is used when `--deviceId` is given a comma separated list of names. `deviceIds` is never used right now.
+ * `--deviceId` can take device names, groups, or use an ID directly.
+ * `--apikey` can take an API key or be ommitted to use the key in `devices.json`
+ * `--generateURL` prints the Join API url without actually calling it.
+### join.pyw
+Use `join.pyw` to run the program without any output.
+### As a module
+```
+#!/usr/bin/env python3
+import join
+args = {
+    "deviceId": "DEVICE_ID_HERE",
+    "apikey": "API_KEY_HERE",
+    "clipboard": "Clipboard Text",
+    "find": True
+}
+response = join.request(args)
 ```
