@@ -7,6 +7,40 @@ import urllib.request
 import urllib.parse
 
 
+def setup():
+    if os.path.isfile("devices.json"):
+        with open("devices.json", "r") as deviceJSON:
+            deviceDataOld = json.loads(deviceJSON.read())
+            apikeyOld = deviceDataOld["apikey"]
+            prefOld = deviceDataOld["pref"]
+    else:
+        apikeyOld = ""
+        prefOld = ""
+    print("Devices Setup")
+    print("An API key is needed. Get your key at https://joinjoaomgcd.appspot.com/")
+    apikey = input("Enter your key (leave blank to reuse pre-existing key): ")
+    if apikey == "":  # allows for using a pre-existing key
+        apikey = apikeyOld
+    devices = urllib.request.urlopen("https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" +
+                                     apikey).read().decode("utf-8")
+    data = json.loads(devices)
+    deviceData = {}
+    deviceData["apikey"] = apikey
+    for x in data["records"]:  # converts json to dict to simplify it
+        deviceData[x["deviceName"]] = x["deviceId"]
+        print(x["deviceName"])
+    pref = input("Choose the device name that you want to push to if no "
+                 "device is defined: ")
+    if pref == "":
+        pref = prefOld
+    deviceData["pref"] = pref
+    data = json.dumps(deviceData, sort_keys=True, indent=4)  # write to file
+    with open("devices.json", "w") as f:
+        f.write(str(data))
+    print("Sucessfully saved device data to devices.json!")
+    print("")
+
+
 def arguments(argue):
     ap = argparse.ArgumentParser()
     ap.add_argument("-te", "--text", help="Text (Tasker Command or notification text)", nargs="*")
@@ -54,6 +88,7 @@ def arguments(argue):
                     "URL (https://play.google.com/store/apps/details?id=com.google.android.youtube) and this is the package"
                     "name (com.google.android.youtube)", nargs="*")
     ap.add_argument("-gu", "--generateURL", help="Print push url rather than actually pushing", action="store_true")
+    ap.add_argument("--setup", action="store_true", help="Initiate setup")
     return ap.parse_args(argue)
 
 
@@ -62,7 +97,7 @@ def devices(deviceFile):
         with open(deviceFile, "r") as device:
             deviceData = json.loads(device.read())
     else:
-        os.system("joinsetup.py -d")
+        setup()
         with open(deviceFile, "r") as device:
             deviceData = json.loads(device.read())
     return deviceData
@@ -80,6 +115,7 @@ def contacts(contactsFile):
 def request(args, devices, contacts={}):
     generateURL = args["generateURL"]
     args.pop("generateURL", None)
+    args.pop("setup", None)
     if args["device"] is None:
         args["device"] = devices["pref"]
     for key, value in args.items():  # fixes the need to encase args in quotes
@@ -123,6 +159,8 @@ def request(args, devices, contacts={}):
 def main():
     cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
     opts = vars(arguments(sys.argv[1:]))
+    if opts["setup"]:
+        setup()
     deviceData = devices(cwd + "/devices.json")
     if opts["smsnumber"] is not None or opts["callnumber"] is not None:
         contactData = contacts(cwd + "/contacts.json")
