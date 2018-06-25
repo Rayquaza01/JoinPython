@@ -22,6 +22,8 @@ def arguments(argue):
     ap.add_argument("-im", "--image", help="Image URI - publicly accessible URL or local file URI; used whenever a notification is created")
     ap.add_argument("-g", "--group", help="Notification Group (Android 7 and above) - allows you to join notifications in different groups",
                     nargs="*")
+    ap.add_argument("-ac", "--actions", help="Set notification buttons with customized behaviour. "
+                    "See https://joaoapps.com/join/actions/#notifications", nargs="*")
     ap.add_argument("-c", "--clipboard", help="Clipboard", nargs="*")
     ap.add_argument("-f", "--file", help="File (must be a publicly accessible URL)")
     ap.add_argument("-d", "--device", help="The device name or a group (group.all, group.android, group.chrome, group.windows10, group."
@@ -33,6 +35,10 @@ def arguments(argue):
                     "smsnumber values", nargs="*")
     ap.add_argument("-fi", "--find", help="Set to true to make your device ring loudly", action="store_true")
     ap.add_argument("-w", "--wallpaper", help="A publicly accessible URL of an image file. Will set the wallpaper on the receiving device")
+    ap.add_argument("-mmss", "--mmssubject", help="Subject for the message. This will make the sent message be an MMS instead of an SMS",
+                    nargs="*")
+    ap.add_argument("-mmsu", "--mmsurgent", help="Set to 1 if this is an urgent MMS. This will make the sent message be an MMS instead of"
+                    " an SMS", action="store_true")
     ap.add_argument("-mms", "--mmsfile", help="MMS file. smsnumber must be set for this to have an affect")
     ap.add_argument("-lw", "--lockWallpaper", help="The wallpaper to set on the lockscreen (Android 7+), must be publicly accessible URL")
     ap.add_argument("-if", "--interruptionFilter", help="Interruption Mode (1: Show All, 2: Priority Only, 3: Total Silence, 4: AlarmsOnly",
@@ -40,6 +46,13 @@ def arguments(argue):
     ap.add_argument("-mv", "--mediaVolume", help="Media Volume - number from 0 to 15", type=int, choices=range(0, 16))
     ap.add_argument("-av", "--alarmVolume", help="Media Volume - number from 0 to 7", type=int, choices=range(0, 8))
     ap.add_argument("-rv", "--ringVolume", help="Ringer Volume - number from 0 to 7", type=int, choices=range(0, 8))
+    ap.add_argument("-sa", "--say", help="Say some text out loud.", nargs="*")
+    ap.add_argument("-l", "--language", help="The language to use for the say text", nargs="*")
+    ap.add_argument("-a", "--app", help="App name of the app you want to open on the remote device", nargs="*")
+    ap.add_argument("-ap", "--appPackage", help="Package name of the app you want to open on the remote device. You can check the package "
+                    "name for an app by going to its Google Play page and checking the end of the URL. Example: for YouTube this is the "
+                    "URL (https://play.google.com/store/apps/details?id=com.google.android.youtube) and this is the package"
+                    "name (com.google.android.youtube)", nargs="*")
     ap.add_argument("-gu", "--generateURL", help="Print push url rather than actually pushing", action="store_true")
     return ap.parse_args(argue)
 
@@ -82,6 +95,10 @@ def request(args, devices, contacts={}):
         args["find"] = "true"
     else:
         args.pop("find", None)
+    if args["mmsurgent"]:
+        args["mmsurgent"] = "1"
+    else:
+        args.pop("mmsurgent", None)
     deviceName = args["device"]
     args.pop("device", None)  # removes device to prevent sending extra params
     args["apikey"] = devices["apikey"]
