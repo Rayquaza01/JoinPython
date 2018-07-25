@@ -136,8 +136,6 @@ def request(args, deviceData={"pref": ""}, contacts={}):
     if "callnumber" in args:
         if args["callnumber"] in contacts:
             args["callnumber"] = contacts[args["callnumber"]]
-    if "find" in args:
-        args["find"] = "true"
     if "mmsurgent" in args:
         args["mmsurgent"] = "1"
     if "apikey" not in args:
