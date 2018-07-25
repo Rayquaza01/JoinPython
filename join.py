@@ -65,6 +65,8 @@ def arguments(argue):
     ap.add_argument("-api", "--apikey", help="Your Join API key", nargs="?")
     ap.add_argument("-smsn", "--smsnumber", help="Phone number to send an SMS to. If you want to set an SMS you need to set this and the "
                     "smstext values", nargs="*")
+    ap.add_argument("-smsc", "--smscontactname", help="Alternatively to the smsnumber you can specify this and Join will send the SMS to "
+                    "the first number that matches the name", nargs="*")
     ap.add_argument("-cn", "--callnumber", nargs="*", help="A number to call")
     ap.add_argument("-smst", "--smstext", help="Some text to send in an SMS. If you want to set an SMS you need to set this and the "
                     "smsnumber values", nargs="*")
@@ -88,6 +90,7 @@ def arguments(argue):
                     "name for an app by going to its Google Play page and checking the end of the URL. Example: for YouTube this is the "
                     "URL (https://play.google.com/store/apps/details?id=com.google.android.youtube) and this is the package"
                     "name (com.google.android.youtube)", nargs="*")
+    ap.add_argument("-dot", "--dismissOnTouch", help="set to true to make the notification go away when you touch it", action="store_true")
     ap.add_argument("-gu", "--generateURL", help="Print push url rather than actually pushing", action="store_true")
     ap.add_argument("--setup", action="store_true", help="Initiate setup")
     return ap.parse_args(argue)
