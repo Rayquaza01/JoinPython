@@ -148,10 +148,7 @@ def request(args, deviceData={"pref": ""}, contacts={}):
         args["deviceId"] = args["deviceId"]
     elif args["deviceId"] in deviceData:  # allows for single device
         args["deviceId"] = deviceData[args["deviceId"]]
-    encoded = []
-    for key, value in args.items():
-        encoded.append("=".join([key, urllib.parse.quote_plus(str(value))]))
-    url = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?" + "&".join(encoded)
+    url = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?" + urllib.parse.urlencode(args)
     if generateURL:
         return url
     else:
