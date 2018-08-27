@@ -1,7 +1,7 @@
 # JoinPython
 A python script that allows for pushing to Join by Joaoapps from the command line.
 
-https://gfycat.com/SentimentalHiddenChick
+![image](https://i.imgur.com/9Yv4YVl.gif)
 
 ## Requires
  * Python3
