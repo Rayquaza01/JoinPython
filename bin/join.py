@@ -1,47 +1,36 @@
 #!/usr/bin/env python3
+import joinpython as join
 import os
-import sys
-import argparse
 import json
 import urllib.request
-import urllib.parse
+import argparse
 
 
-def setup():
-    if os.path.isfile("devices.json"):
-        with open("devices.json", "r") as deviceJSON:
-            deviceDataOld = json.loads(deviceJSON.read())
-            apikeyOld = deviceDataOld["apikey"]
-            prefOld = deviceDataOld["pref"]
+def configExists(name):
+    homefile = os.path.join(os.path.expanduser("~"), name)
+    if os.path.exists(name):  # if file in current folder
+        return name
+    elif os.path.exists(homefile):  # if file in home folder
+        return homefile
+    else:  # file not found
+        return False
+
+
+def loadConfig(file):
+    if os.path.isfile(file):  # loads device json into a dictionary
+        with open(file, "r") as device:
+            deviceData = json.loads(device.read())
     else:
-        apikeyOld = ""
-        prefOld = ""
-    print("Devices Setup")
-    print("An API key is needed. Get your key at https://joinjoaomgcd.appspot.com/")
-    apikey = input("Enter your key (leave blank to reuse pre-existing key): ")
-    if apikey == "":  # allows for using a pre-existing key
-        apikey = apikeyOld
-    url = "https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" + apikey
-    deviceJSON = urllib.request.urlopen(url).read().decode("utf-8")
-    data = json.loads(deviceJSON)
-    deviceData = {}
-    deviceData["apikey"] = apikey
-    for x in data["records"]:  # converts json to dict to simplify it
-        deviceData[x["deviceName"]] = x["deviceId"]
-        print(x["deviceName"])
-    pref = input("Choose the device name that you want to push to if no "
-                 "device is defined: ")
-    if pref == "":
-        pref = prefOld
-    deviceData["pref"] = pref
-    data = json.dumps(deviceData, sort_keys=True, indent=4)  # write to file
-    with open("devices.json", "w") as f:
-        f.write(str(data))
-    print("Sucessfully saved device data to devices.json!")
-    print("")
+        deviceData = {
+            "devices": {
+                "pref": ""
+            },
+            "contacts": {}
+        }
+    return deviceData
 
 
-def arguments(argue):
+def arguments():
     ap = argparse.ArgumentParser()
     ap.add_argument("-te", "--text", help="Text (Tasker Command or notification text)", nargs="*")
     ap.add_argument("-ti", "--title", help="Title (If set will create notification)", nargs="*")
@@ -93,80 +82,54 @@ def arguments(argue):
     ap.add_argument("-dot", "--dismissOnTouch", help="set to true to make the notification go away when you touch it", action="store_true")
     ap.add_argument("-gu", "--generateURL", help="Print push url rather than actually pushing", action="store_true")
     ap.add_argument("--setup", action="store_true", help="Initiate setup")
-    return ap.parse_args(argue)
+    return ap.parse_args()
 
 
-def devices(deviceFile):
-    if os.path.isfile(deviceFile):  # loads device json into a dictionary
-        with open(deviceFile, "r") as device:
-            deviceData = json.loads(device.read())
+def setup():
+    configFile = os.path.expanduser("~/JoinPython.json")
+    if os.path.isfile(configFile):  # save old config options
+        with open(configFile, "r") as deviceJSON:
+            deviceDataOld = json.loads(deviceJSON.read())
+            apikeyOld = deviceDataOld["devices"]["apikey"]
+            prefOld = deviceDataOld["devices"]["pref"]
+            contactsOld = deviceDataOld["contacts"]
     else:
-        deviceData = {}
-    return deviceData
-
-
-def contacts(contactsFile):
-    if os.path.isfile(contactsFile):  # loads the contacts json if a number or name is supplied.
-        with open(contactsFile, "r") as contact:
-            contactData = json.loads(contact.read())
-    else:  # defaults to a number if a name is not found in the json
-        contactData = {}
-    return contactData
-
-
-def request(args, deviceData={"pref": ""}, contacts={}):
-    tempArgs = args.copy()
-    for value in tempArgs:
-        if tempArgs[value] is None or not tempArgs[value]:
-            args.pop(value, None)  # Pop none parameters
-    if "generateURL" in args:
-        generateURL = True
-    else:
-        generateURL = False
-    args.pop("generateURL", None)
-    args.pop("setup", None)
-    if "deviceId" not in args:
-        args["deviceId"] = deviceData["pref"]
-    for key, value in args.items():  # fixes the need to encase args in quotes
-        if type(value) is list:
-            args[key] = " ".join(value)
-    if "smsnumber" in args:
-        if args["smsnumber"] in contacts:
-            args["smsnumber"] = contacts[args["smsnumber"]]
-    if "callnumber" in args:
-        if args["callnumber"] in contacts:
-            args["callnumber"] = contacts[args["callnumber"]]
-    if "mmsurgent" in args:
-        args["mmsurgent"] = "1"
-    if "apikey" not in args:
-        args["apikey"] = deviceData["apikey"]
-    # https://plus.google.com/+Jo%C3%A3oDias/posts/GYwEvtSb238
-    if "," in args["deviceId"]:  # allows for multiple device names separated by commas
-        args["deviceNames"] = args["deviceId"]
-        args.pop("deviceId", None)
-    elif "group" in args["deviceId"]:  # allows for groups (group.android, etc.)
-        args["deviceId"] = args["deviceId"]
-    elif args["deviceId"] in deviceData:  # allows for single device
-        args["deviceId"] = deviceData[args["deviceId"]]
-    url = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?" + urllib.parse.urlencode(args)
-    if generateURL:
-        return url
-    else:
-        return urllib.request.urlopen(url).read().decode("utf-8")
+        apikeyOld = ""
+        prefOld = ""
+        contactsOld = {}
+    print("Devices Setup")
+    print("An API key is needed. Get your key at https://joinjoaomgcd.appspot.com/")
+    apikey = input("Enter your key (leave blank to reuse pre-existing key): ")
+    if apikey == "":  # allows for using a pre-existing key
+        apikey = apikeyOld
+    url = "https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" + apikey
+    deviceJSON = urllib.request.urlopen(url).read().decode("utf-8")
+    data = json.loads(deviceJSON)
+    deviceData = {"devices": {}, "contacts": contactsOld}
+    deviceData["devices"]["apikey"] = apikey
+    for x in data["records"]:  # converts json to dict to simplify it
+        deviceData["devices"][x["deviceName"]] = x["deviceId"]
+        print(x["deviceName"])
+    pref = input("Choose the device name that you want to push to if no device is defined: ")
+    if pref == "":
+        pref = prefOld
+    deviceData["devices"]["pref"] = pref
+    data = json.dumps(deviceData, sort_keys=True, indent=4)  # write to file
+    with open(configFile, "w") as f:
+        f.write(data)
+    print("Sucessfully saved device data to {0}!".format(configFile))
+    print("")
 
 
 def main():
-    cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
-    os.chdir(cwd)
-    opts = vars(arguments(sys.argv[1:]))
+    opts = vars(arguments())
     if opts["setup"]:
         setup()
-    deviceData = devices(cwd + "/devices.json")
-    if opts["smsnumber"] is not None or opts["callnumber"] is not None:
-        contactData = contacts(cwd + "/contacts.json")
-    else:
-        contactData = {}
-    print(request(opts, deviceData, contactData))
+    configFile = configExists("JoinPython.json")
+    if configFile:
+        print("Using config {0}".format(configFile))
+    config = loadConfig(configFile)
+    print(join.request(opts, config["devices"], config["contacts"]))
 
 
 if __name__ == "__main__":
