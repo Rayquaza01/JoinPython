@@ -2,3 +2,6 @@
 *.json
 *.csv
 __pycache__/
+build/
+dist/
+joinpython.egg-info/

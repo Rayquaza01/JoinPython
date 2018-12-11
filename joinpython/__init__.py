@@ -31,9 +31,12 @@ def request(args, deviceData={"pref": ""}, contacts={}):
             args["callnumber"] = contacts[args["callnumber"]]
     if "mmsurgent" in args:
         args["mmsurgent"] = "1"
-    if "apikey" not in args:
-        args["apikey"] = deviceData["apikey"]
     # https://plus.google.com/+Jo%C3%A3oDias/posts/GYwEvtSb238
+    if "apikey" not in args:
+        if "apikey" in deviceData:
+            args["apikey"] = deviceData["apikey"]
+        else:
+            raise Exception("You need to provide an API key.")
     if "," in args["deviceId"]:  # allows for multiple device names separated by commas
         args["deviceNames"] = args["deviceId"]
         args.pop("deviceId", None)
