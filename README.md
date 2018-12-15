@@ -36,7 +36,7 @@ The file should look something like this:
 ```
 
 The actual formatting of the numbers is unimportant; Join should be able to handle most formats.  
-You can also use [this Tasker task](https://raw.githubusercontent.com/Rayquaza01/JoinPython/master/ContactsGenerator.tsk.xml) to pull the numbers from your phone's contacts (Requires Tasker, AutoTools, and AutoContacts to run)
+You can also use [this Tasker task](https://raw.githubusercontent.com/Rayquaza01/JoinPython/master/ContactsGenerator.tsk.xml) ([also available here](https://taskernet.com/shares/?user=AS35m8ln60P2bw2QxMdurJqOe5aESjUdS8HTc0B35EGwTB2qVtotZiazaLMpwomX2PvkhnktwDQ%3D&id=Task%3AJoinPythonContactsGenerator)) to pull the numbers from your phone's contacts (Requires Tasker, AutoTools, and AutoContacts to run)
 
 `--smscontactname` can be used instead of contact setup, but contact setup is still required for `--callnumber` and `--smsnumber`
 
