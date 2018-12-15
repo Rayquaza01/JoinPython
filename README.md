@@ -11,7 +11,7 @@ A python script that allows for pushing to Join by Joaoapps from the command lin
 
 ## Setup
 
--   Run `pip3 install git+https://github.com/Rayquaza01/JoinPython`
+-   Run `pip3 install joinpython` or `pip3 install git+https://github.com/Rayquaza01/JoinPython`
 -   Run `join.py --setup` to start the setup (optional)
 
 ### The Config File
@@ -22,16 +22,13 @@ If you have a file named `JoinPython.json` in your current directory, it will be
 ### Contacts Setup
 
 The `--smsnumber` and `--callnumber` arguments take a phone number to be used by Join. You can edit the config file (`~/JoinPython.json`) with contact names to allow these arguments to take a name instead.  
-The file should look something like this:
+The contacts section should look something like this:
 
-```
+```json
 {
-    "devices": {...},
-    "contacts": {
-        "Name 1": "5555555555",
-        "Name 2": "(555) 555-5555",
-        "Name 3": "+1 555.555.5555"
-    }
+    "Name 1": "5555555555",
+    "Name 2": "(555) 555-5555",
+    "Name 3": "+1 555.555.5555"
 }
 ```
 
@@ -47,7 +44,7 @@ Run `join.py` with arguments corresponding to what you want to do. Arguments cor
 ### Irregularities
 
 -   The `deviceNames` parameter is used when `--deviceId` is given a comma separated list of names. `deviceIds` is never used right now.
-    -   Including a comma anywhere in the `--deviceId` parameter will force it to use `deviceNames`, even if you only list one device. `join.py -d Phone -c test` won't work without `devices.json`, but `join.py -d Phone, -c test` will.
+-   Including a comma anywhere in the `--deviceId` parameter will force it to use `deviceNames`, even if you only list one device. `join.py -d Phone -c test` won't work without `devices.json`, but `join.py -d Phone, -c test` will.
 -   `--deviceId` can take device names, groups, or use an ID directly.
 -   `--apikey` can take an API key or be ommitted to use the key in `devices.json`
 -   `--generateURL` prints the Join API URL without actually calling it.

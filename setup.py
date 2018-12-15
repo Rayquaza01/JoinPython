@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name="joinpython",
-      version="1.0.0",
+      version="1.0.1",
       description="A python script that allows for pushing to Join by Joaoapps from the command line.",
       long_description=long_description,
       long_description_content_type="text/markdown",
@@ -19,6 +19,6 @@ setup(name="joinpython",
       package_data={"": ["README.md"]},
       classifiers=[
           "Programming Language :: Python :: 3",
-          "License :: OSI Approved :: MIT",
+          "License :: OSI Approved :: MIT License",
           "Operating System :: OS Independent"
       ])
