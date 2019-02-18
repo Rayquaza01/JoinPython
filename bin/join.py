@@ -6,30 +6,6 @@ import urllib.request
 import argparse
 
 
-def configExists(name):
-    homefile = os.path.join(os.path.expanduser("~"), name)
-    if os.path.exists(name):  # if file in current folder
-        return name
-    elif os.path.exists(homefile):  # if file in home folder
-        return homefile
-    else:  # file not found
-        return False
-
-
-def loadConfig(file):
-    if os.path.isfile(file):  # loads device json into a dictionary
-        with open(file, "r") as device:
-            deviceData = json.loads(device.read())
-    else:
-        deviceData = {
-            "devices": {
-                "pref": ""
-            },
-            "contacts": {}
-        }
-    return deviceData
-
-
 def arguments():
     ap = argparse.ArgumentParser()
     ap.add_argument("-te", "--text", help="Text (Tasker Command or notification text)", nargs="*")
@@ -85,13 +61,38 @@ def arguments():
     return ap.parse_args()
 
 
+def configExists(name):
+    homefile = os.path.join(os.path.expanduser("~"), name)
+    if os.path.exists(name):  # if file in current folder
+        return name
+    elif os.path.exists(homefile):  # if file in home folder
+        return homefile
+    else:  # file not found
+        return False
+
+
+def loadConfig(file):
+    if os.path.isfile(file):  # loads device json into a dictionary
+        with open(file, "r") as device:
+            deviceData = json.loads(device.read())
+    else:
+        deviceData = {
+            "devices": {},
+            "default_device": "",
+            "apikey": "",
+            "contacts": {},
+            "version": "1.0.2"
+        }
+    return deviceData
+
+
 def setup():
     configFile = os.path.expanduser("~/JoinPython.json")
     if os.path.isfile(configFile):  # save old config options
         with open(configFile, "r") as deviceJSON:
             deviceDataOld = json.loads(deviceJSON.read())
-            apikeyOld = deviceDataOld["devices"]["apikey"]
-            prefOld = deviceDataOld["devices"]["pref"]
+            apikeyOld = deviceDataOld["apikey"]
+            prefOld = deviceDataOld["default_device"]
             contactsOld = deviceDataOld["contacts"]
     else:
         apikeyOld = ""
@@ -106,19 +107,53 @@ def setup():
     deviceJSON = urllib.request.urlopen(url).read().decode("utf-8")
     data = json.loads(deviceJSON)
     deviceData = {"devices": {}, "contacts": contactsOld}
-    deviceData["devices"]["apikey"] = apikey
+    deviceData["apikey"] = apikey
     for x in data["records"]:  # converts json to dict to simplify it
         deviceData["devices"][x["deviceName"]] = x["deviceId"]
         print(x["deviceName"])
     pref = input("Choose the device name that you want to push to if no device is defined: ")
     if pref == "":
         pref = prefOld
-    deviceData["devices"]["pref"] = pref
+    deviceData["default_device"] = pref
     data = json.dumps(deviceData, sort_keys=True, indent=4)  # write to file
     with open(configFile, "w") as f:
         f.write(data)
     print("Sucessfully saved device data to {0}!".format(configFile))
     print("")
+
+
+def fixOpts(opts, config):
+    # put api key in opts
+    opts["apikey"] = config["apikey"]
+
+    # remove setup key
+    opts.pop("setup", None)
+
+    for key, value in opts.items():  # fixes the need to encase opts in quotes
+        if type(value) is list:
+            opts[key] = " ".join(value)
+
+    # replace contact names with phone numbers
+    if opts["smsnumber"] is not None:
+        if opts["smsnumber"] in config["contacts"]:
+            opts["smsnumber"] = config["contacts"][opts["smsnumber"]]
+    if opts["callnumber"] is not None:
+        if opts["callnumber"] in config["contacts"]:
+            opts["callnumber"] = config["contacts"][opts["callnumber"]]
+
+    # fill in default device if not provided
+    if opts["deviceId"] is None:
+        opts["deviceId"] = config["default_device"]
+
+    if "," in opts["deviceId"]:  # replace device id with device names if comma present
+        opts["deviceNames"] = opts["deviceId"]
+        opts.pop("deviceId", None)
+    elif "group" in opts["deviceId"]:  # leave alone if group is in device id
+        pass
+    elif opts["deviceId"] in config["devices"]:  # replace device name with device id
+        opts["deviceId"] = config["devices"][opts["deviceId"]]
+
+    return opts
 
 
 def main():
@@ -129,7 +164,22 @@ def main():
     if configFile:
         print("Using config {0}".format(configFile))
     config = loadConfig(configFile)
-    print(join.request(opts, config["devices"], config["contacts"]))
+
+    # Update config to new version, move non devices out of devices section
+    if "version" not in config:
+        config["apikey"] = config["devices"]["apikey"]
+        config["devices"].pop("apikey", None)
+        config["default_device"] = config["devices"]["pref"]
+        config["devices"].pop("pref", None)
+        config["version"] = "1.0.2"
+        with open(configFile, "w") as f:
+            f.write(json.dumps(config, sort_keys=True, indent=4))
+        print("Updated config!")
+
+    # process args, prepare for sending to join
+    opts = fixOpts(opts, config)
+
+    print(join.request(opts))
 
 
 if __name__ == "__main__":
