@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-import os
-import sys
-import argparse
-import json
 import urllib.request
 import urllib.parse
 
@@ -13,11 +9,6 @@ def request(args):
     # https://web.archive.org/web/20190218025339/https://plus.google.com/+Jo%C3%A3oDias/posts/GYwEvtSb238
     if "apikey" not in args:
         raise Exception("You need to provide an API key.")
-
-    tempArgs = args.copy()
-    for value in tempArgs:
-        if tempArgs[value] is None or not tempArgs[value]:
-            args.pop(value, None)  # Pop none parameters
 
     # generate url if in options
     if "generateURL" in args:

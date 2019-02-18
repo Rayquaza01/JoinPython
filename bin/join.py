@@ -125,24 +125,29 @@ def setup():
 def fixOpts(opts, config):
     # put api key in opts
     opts["apikey"] = config["apikey"]
-
     # remove setup key
     opts.pop("setup", None)
+
+    # remove None and False from opts
+    tempArgs = opts.copy()
+    for value in tempArgs:
+        if tempArgs[value] is None or not tempArgs[value]:
+            opts.pop(value, None)  # Pop none parameters
 
     for key, value in opts.items():  # fixes the need to encase opts in quotes
         if type(value) is list:
             opts[key] = " ".join(value)
 
     # replace contact names with phone numbers
-    if opts["smsnumber"] is not None:
+    if "smsnumber" in opts:
         if opts["smsnumber"] in config["contacts"]:
             opts["smsnumber"] = config["contacts"][opts["smsnumber"]]
-    if opts["callnumber"] is not None:
+    if "callnumber" in opts:
         if opts["callnumber"] in config["contacts"]:
             opts["callnumber"] = config["contacts"][opts["callnumber"]]
 
     # fill in default device if not provided
-    if opts["deviceId"] is None:
+    if "deviceId" not in opts:
         opts["deviceId"] = config["default_device"]
 
     if "," in opts["deviceId"]:  # replace device id with device names if comma present
