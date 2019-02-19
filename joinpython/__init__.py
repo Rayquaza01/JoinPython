@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 import urllib.request
 import urllib.parse
+import json
 version = "1.0.2"
+
+
+def listDevices(apikey):
+    reg = urllib.request.urlopen("https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" + apikey)
+    return json.loads(reg.read().decode("utf-8"))
 
 
 def request(args):
@@ -28,4 +34,4 @@ def request(args):
     if generateURL:
         return url
     else:
-        return urllib.request.urlopen(url).read().decode("utf-8")
+        return json.loads(urllib.request.urlopen(url).read().decode("utf-8"))

@@ -120,11 +120,10 @@ def setup():
     print("Devices:")
 
     # get list of devices
-    url = "https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" + config["apikey"]
-    registration = json.loads(urllib.request.urlopen(url).read().decode("utf-8"))
+    devices = join.listDevices(config["apikey"])
 
     # store device names and ids to config, print names
-    for device in registration["records"]:  # converts json to dict to simplify it
+    for device in devices["records"]:  # converts json to dict to simplify it
         config["devices"][device["deviceName"]] = device["deviceId"]
         print("  " + device["deviceName"])
     print("")
