@@ -19,6 +19,23 @@ A python script that allows for pushing to Join by Joaoapps from the command lin
 If you run setup, a config file is created at `~/JoinPython.json` with your device and contact data. This allows you to omit certain arguments (`--apikey`, `--deviceId`, etc.) when running the program.  
 If you have a file named `JoinPython.json` in your current directory, it will be used instead of the one in your home folder.
 
+Sample config file:
+
+```json
+{
+    "version": "VERSION",
+    "apikey": "YOUR_API_KEY",
+    "default_device": "Phone",
+    "contacts": {
+        "Name 1": "5555555555"
+    },
+    "devices": {
+        "Phone": "PHONE_DEVICE_ID",
+        "Tablet": "TABLET_DEVICE_ID"
+    }
+}
+```
+
 ### Contacts Setup
 
 The `--smsnumber` and `--callnumber` arguments take a phone number to be used by Join. You can edit the config file (`~/JoinPython.json`) with contact names to allow these arguments to take a name instead.  
