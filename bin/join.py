@@ -4,6 +4,7 @@ import os
 import json
 import urllib.request
 import argparse
+version = "1.0.2"
 
 
 def arguments():
@@ -76,55 +77,75 @@ def loadConfig(file):
         with open(file, "r") as device:
             deviceData = json.loads(device.read())
     else:
+        # load blank config if there is no config file
         deviceData = {
             "devices": {},
             "default_device": "",
             "apikey": "",
             "contacts": {},
-            "version": "1.0.2"
+            "version": version
         }
     return deviceData
 
 
 def setup():
     configFile = os.path.expanduser("~/JoinPython.json")
+
+    # get old info from config, if it exists
     if os.path.isfile(configFile):  # save old config options
         with open(configFile, "r") as deviceJSON:
-            deviceDataOld = json.loads(deviceJSON.read())
-            apikeyOld = deviceDataOld["apikey"]
-            prefOld = deviceDataOld["default_device"]
-            contactsOld = deviceDataOld["contacts"]
+            configOld = json.loads(deviceJSON.read())
+            apikeyOld = configOld["apikey"]
+            prefOld = configOld["default_device"]
+            contactsOld = configOld["contacts"]
     else:
         apikeyOld = ""
         prefOld = ""
         contactsOld = {}
+
+    # base config
+    config = {"devices": {}, "contacts": contactsOld, "version": version}
+
     print("Devices Setup")
+
+    # ask for key
     print("An API key is needed. Get your key at https://joinjoaomgcd.appspot.com/")
-    apikey = input("Enter your key (leave blank to reuse pre-existing key): ")
-    if apikey == "":  # allows for using a pre-existing key
-        apikey = apikeyOld
-    url = "https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" + apikey
-    deviceJSON = urllib.request.urlopen(url).read().decode("utf-8")
-    data = json.loads(deviceJSON)
-    deviceData = {"devices": {}, "contacts": contactsOld}
-    deviceData["apikey"] = apikey
-    for x in data["records"]:  # converts json to dict to simplify it
-        deviceData["devices"][x["deviceName"]] = x["deviceId"]
-        print(x["deviceName"])
-    pref = input("Choose the device name that you want to push to if no device is defined: ")
+    apiPrompt = "Enter your API key"
+    if apikeyOld != "":
+        apiPrompt += " ({})".format(apikeyOld)
+    config["apikey"] = input(apiPrompt + ": ")
+    if config["apikey"] == "":  # allows for using a pre-existing key
+        config["apikey"] = apikeyOld
+
+    print("")
+    print("Devices:")
+
+    # get list of devices
+    url = "https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices?apikey=" + config["apikey"]
+    registration = json.loads(urllib.request.urlopen(url).read().decode("utf-8"))
+
+    # store device names and ids to config, print names
+    for device in registration["records"]:  # converts json to dict to simplify it
+        config["devices"][device["deviceName"]] = device["deviceId"]
+        print("  " + device["deviceName"])
+    print("")
+
+    prefPrompt = "Choose the device name that you want to push to if you don't provide the deviceId argument"
+    if prefOld != "":
+        prefPrompt += " ({})".format(prefOld)
+    pref = input(prefPrompt + ": ")
     if pref == "":
-        pref = prefOld
-    deviceData["default_device"] = pref
-    data = json.dumps(deviceData, sort_keys=True, indent=4)  # write to file
+        config["default_device"] = prefOld
+
+    # write config
     with open(configFile, "w") as f:
-        f.write(data)
+        f.write(json.dumps(config, sort_keys=True, indent=4))
+
     print("Sucessfully saved device data to {0}!".format(configFile))
     print("")
 
 
 def fixOpts(opts, config):
-    # put api key in opts
-    opts["apikey"] = config["apikey"]
     # remove setup key
     opts.pop("setup", None)
 
@@ -137,6 +158,10 @@ def fixOpts(opts, config):
     for key, value in opts.items():  # fixes the need to encase opts in quotes
         if type(value) is list:
             opts[key] = " ".join(value)
+
+    # put api key in opts if not provided
+    if "apikey" not in opts:
+        opts["apikey"] = config["apikey"]
 
     # replace contact names with phone numbers
     if "smsnumber" in opts:
@@ -153,7 +178,7 @@ def fixOpts(opts, config):
     if "," in opts["deviceId"]:  # replace device id with device names if comma present
         opts["deviceNames"] = opts["deviceId"]
         opts.pop("deviceId", None)
-    elif "group" in opts["deviceId"]:  # leave alone if group is in device id
+    elif opts["deviceId"].startswith("group."):  # leave alone if group is in device id
         pass
     elif opts["deviceId"] in config["devices"]:  # replace device name with device id
         opts["deviceId"] = config["devices"][opts["deviceId"]]
@@ -176,7 +201,7 @@ def main():
         config["devices"].pop("apikey", None)
         config["default_device"] = config["devices"]["pref"]
         config["devices"].pop("pref", None)
-        config["version"] = "1.0.2"
+        config["version"] = version
         with open(configFile, "w") as f:
             f.write(json.dumps(config, sort_keys=True, indent=4))
         print("Updated config!")
