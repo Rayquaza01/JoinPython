@@ -1,0 +1,21 @@
+{
+    "name": "JoinPython",
+    "version": "1.0.2",
+    "description": "A python script that allows for pushing to Join by Joaoapps from the command line.",
+    "main": "bin/join.py",
+    "scripts": {
+        "build": "python3 setup.py sdist bdist_wheel",
+        "upload:test": "twine upload --repository-url https://test.pypi.org/legacy/ dist/*",
+        "upload": "twine upload dist/*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Rayquaza01/JoinPython.git"
+    },
+    "author": "Rayquaza01",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Rayquaza01/JoinPython/issues"
+    },
+    "homepage": "https://github.com/Rayquaza01/JoinPython#readme"
+}
