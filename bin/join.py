@@ -4,7 +4,6 @@ import os
 import json
 import urllib.request
 import argparse
-version = "1.0.2"
 
 
 def arguments():
@@ -83,7 +82,7 @@ def loadConfig(file):
             "default_device": "",
             "apikey": "",
             "contacts": {},
-            "version": version
+            "version": join.version
         }
     return deviceData
 
@@ -104,7 +103,7 @@ def setup():
         contactsOld = {}
 
     # base config
-    config = {"devices": {}, "contacts": contactsOld, "version": version}
+    config = {"devices": {}, "contacts": contactsOld, "version": join.version}
 
     print("Devices Setup")
 
@@ -201,7 +200,7 @@ def main():
         config["devices"].pop("apikey", None)
         config["default_device"] = config["devices"]["pref"]
         config["devices"].pop("pref", None)
-        config["version"] = version
+        config["version"] = join.version
         with open(configFile, "w") as f:
             f.write(json.dumps(config, sort_keys=True, indent=4))
         print("Updated config!")

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import urllib.request
 import urllib.parse
+version = "1.0.2"
 
 
 def request(args):
