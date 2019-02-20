@@ -2,7 +2,6 @@
 import joinpython as join
 import os
 import json
-import urllib.request
 import argparse
 
 
