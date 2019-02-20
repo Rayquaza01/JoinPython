@@ -17,7 +17,8 @@ A python script that allows for pushing to Join by Joaoapps from the command lin
 ### The Config File
 
 If you run setup, a config file is created at `~/JoinPython.json` with your device and contact data. This allows you to omit certain arguments (`--apikey`, `--deviceId`, etc.) when running the program.  
-If you have a file named `JoinPython.json` in your current directory, it will be used instead of the one in your home folder.
+If you have a file named `JoinPython.json` in your current directory, it will be used instead of the one in your home folder.  
+You can choose to use a different config file with the `--config` option.
 
 Sample config file:
 
@@ -62,10 +63,11 @@ Run `join.py` with arguments corresponding to what you want to do. Arguments cor
 
 -   The `deviceNames` parameter is used when `--deviceId` is given a comma separated list of names. `deviceIds` is never used.
 -   Including a comma anywhere in the `--deviceId` parameter will force it to use `deviceNames`, even if you only list one device. `join.py -d Phone -c test` won't work without a config file, but `join.py -d Phone, -c test` will.
--   `--deviceId` can take device names (with a config file), groups (`group.android`, `group.all`, etc.), or use an ID directly.
+-   `--deviceId` can take device names (with a config file or comma), groups (`group.android`, `group.all`, etc.), or use an ID directly.
 -   `--deviceId` can be ommitted if you provide a default device in the config file.
 -   `--apikey` can take an API key or be ommitted to use the key in the config file.
 -   `--generateURL` prints the Join API URL without actually calling it.
+-   `--config` allows you to choose what config file to use
 
 ### As a module
 
@@ -75,7 +77,8 @@ Returns a JSON object of devices from the Join API. It directly returns the resp
 
 #### `joinpython.request( args )`
 
-Takes a dictionary of API parameters and sends them to Join.
+Takes a dictionary of API parameters and sends them to Join.  
+If your arguments include the key `generateURL`, it will return a string of the Join URL instead of sending the request to Join.
 
 Example:
 
@@ -90,8 +93,6 @@ args = {
 }
 response = joinpython.request(args)
 ```
-
-If your arguments include the key `generateURL`, it will return the URL instead of sending the request to Join.
 
 ## Old Version
 
