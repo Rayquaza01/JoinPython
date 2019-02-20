@@ -57,10 +57,13 @@ def arguments():
     ap.add_argument("-dot", "--dismissOnTouch", help="set to true to make the notification go away when you touch it", action="store_true")
     ap.add_argument("-gu", "--generateURL", help="Print push url rather than actually pushing", action="store_true")
     ap.add_argument("--setup", action="store_true", help="Initiate setup")
+    ap.add_argument("--config", help="The config file")
     return ap.parse_args()
 
 
-def configExists(name):
+def configExists(name, cfg):
+    if cfg is not None and os.path.exists(cfg):
+        return cfg
     homefile = os.path.join(os.path.expanduser("~"), name)
     if os.path.exists(name):  # if file in current folder
         return name
@@ -86,8 +89,9 @@ def loadConfig(file):
     return deviceData
 
 
-def setup():
-    configFile = os.path.expanduser("~/JoinPython.json")
+def setup(cfg):
+    print("JoinPython Setup")
+    configFile = cfg if cfg is not None else os.path.expanduser("~/JoinPython.json")
 
     # get old info from config, if it exists
     if os.path.isfile(configFile):  # save old config options
@@ -103,8 +107,6 @@ def setup():
 
     # base config
     config = {"devices": {}, "contacts": contactsOld, "version": join.version}
-
-    print("Devices Setup")
 
     # ask for key
     print("An API key is needed. Get your key at https://joinjoaomgcd.appspot.com/")
@@ -143,8 +145,9 @@ def setup():
 
 
 def fixOpts(opts, config):
-    # remove setup key
+    # remove setup, config key
     opts.pop("setup", None)
+    opts.pop("config", None)
 
     # remove None and False from opts
     tempArgs = opts.copy()
@@ -160,7 +163,7 @@ def fixOpts(opts, config):
     if "apikey" not in opts:
         opts["apikey"] = config["apikey"]
 
-    # replace contact names with phone numbers
+    # replace contact names with phone numbers if "smsnumber" in opts:
     if "smsnumber" in opts:
         if opts["smsnumber"] in config["contacts"]:
             opts["smsnumber"] = config["contacts"][opts["smsnumber"]]
@@ -186,8 +189,8 @@ def fixOpts(opts, config):
 def main():
     opts = vars(arguments())
     if opts["setup"]:
-        setup()
-    configFile = configExists("JoinPython.json")
+        setup(opts["config"])
+    configFile = configExists("JoinPython.json", opts["config"])
     if configFile:
         print("Using config {0}".format(configFile))
     config = loadConfig(configFile)
@@ -206,7 +209,14 @@ def main():
     # process args, prepare for sending to join
     opts = fixOpts(opts, config)
 
-    print(join.request(opts))
+    response = join.request(opts)
+    # print error message if not successful
+    if type(response) is dict:
+        if not response["success"]:
+            print(response["errorMessage"])
+    # print generated url
+    else:
+        print(response)
 
 
 if __name__ == "__main__":
