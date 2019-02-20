@@ -153,7 +153,8 @@ def fixOpts(opts, config):
     tempArgs = opts.copy()
     for value in tempArgs:
         if tempArgs[value] is None or not tempArgs[value]:
-            opts.pop(value, None)  # Pop none parameters
+            if type(tempArgs[value]) is not int:  # keep values with 0, like volume
+                opts.pop(value, None)  # Pop none parameters
 
     for key, value in opts.items():  # fixes the need to encase opts in quotes
         if type(value) is list:
