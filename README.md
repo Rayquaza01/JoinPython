@@ -60,25 +60,38 @@ Run `join.py` with arguments corresponding to what you want to do. Arguments cor
 
 ### Irregularities
 
--   The `deviceNames` parameter is used when `--deviceId` is given a comma separated list of names. `deviceIds` is never used right now.
--   Including a comma anywhere in the `--deviceId` parameter will force it to use `deviceNames`, even if you only list one device. `join.py -d Phone -c test` won't work without `devices.json`, but `join.py -d Phone, -c test` will.
--   `--deviceId` can take device names, groups, or use an ID directly.
--   `--apikey` can take an API key or be ommitted to use the key in `devices.json`
+-   The `deviceNames` parameter is used when `--deviceId` is given a comma separated list of names. `deviceIds` is never used.
+-   Including a comma anywhere in the `--deviceId` parameter will force it to use `deviceNames`, even if you only list one device. `join.py -d Phone -c test` won't work without a config file, but `join.py -d Phone, -c test` will.
+-   `--deviceId` can take device names (with a config file), groups (`group.android`, `group.all`, etc.), or use an ID directly.
+-   `--deviceId` can be ommitted if you provide a default device in the config file.
+-   `--apikey` can take an API key or be ommitted to use the key in the config file.
 -   `--generateURL` prints the Join API URL without actually calling it.
 
 ### As a module
 
+#### `joinpython.listDevices( apikey )`
+
+Returns a JSON object of devices from the Join API. It directly returns the response of `https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/listDevices`
+
+#### `joinpython.request( args )`
+
+Takes a dictionary of API parameters and sends them to Join.
+
+Example:
+
 ```python
 #!/usr/bin/env python3
-import joinpython as join
+import joinpython
 args = {
     "deviceId": "DEVICE_ID_HERE",
     "apikey": "API_KEY_HERE",
     "clipboard": "Clipboard Text",
     "find": True
 }
-response = join.request(args)
+response = joinpython.request(args)
 ```
+
+If your arguments include the key `generateURL`, it will return the URL instead of sending the request to Join.
 
 ## Old Version
 
