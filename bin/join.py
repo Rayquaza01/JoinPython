@@ -131,8 +131,8 @@ def setup():
     prefPrompt = "Choose the device name that you want to push to if you don't provide the deviceId argument"
     if prefOld != "":
         prefPrompt += " ({})".format(prefOld)
-    pref = input(prefPrompt + ": ")
-    if pref == "":
+    config["default_device"] = input(prefPrompt + ": ")
+    if config["default_device"] == "":
         config["default_device"] = prefOld
 
     # write config
